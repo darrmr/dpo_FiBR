@@ -173,19 +173,18 @@
 
 ```css
 .masonry-grid__container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-auto-rows: 10px;
-    gap: 1rem;
-    margin-top: 2rem;
+    column-count: 3;
+    column-gap: 24px;
 }
 
 .masonry-item {
-    background: white;
-    padding: 1rem;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    grid-row-end: span 20;
+    display: inline-block;
+    margin: 0 0 1em;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.3s ease;
 }
 
 .masonry-item--short {
