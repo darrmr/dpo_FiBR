@@ -6,22 +6,27 @@
 
 ---
 
-### **Практическое занятие 4: Адаптивная вёрстка с использованием Flexbox, Grid и медиазапросов**
+### **Практическое занятие 5: Проработка мобильного интерфейса**
 
 ---
 
-**Цель:** освоить применение Flexbox для одномерного, Grid для двумерного размещения элементов и медиазапросов для создания адаптивных интерфейсов. Закрепить навыки работы с использованием методологий.
+### **Цель:**  
+Освоить принципы проектирования мобильных интерфейсов с учетом гайдлайнов HIG (Human Interface Guidelines) и MD (Material Design). Научиться создавать удобный для использования одним пальцем интерфейс, продумывать навигацию и обеспечивать обратную связь (feedback) для пользовательских действий
 
 ---
 
 ### **Введение и теоретическая база**
 
-Перед выполнением практики рекомендуется ознакомиться с материалами Лекции 4:
+Перед выполнением практики обязательно ознакомьтесь с основными гайдлайнами:
 
-- **Flexbox** - слайды 26-50 (основные свойства, оси, выравнивание)
-- **Grid** - слайды 51-70 (сетка, треки, размещение элементов)
-- **Masonry** - слайды 71-77 (нестандартная сетка с автоматическим заполнением)
-- **Медиазапросы** - слайды 78-90 (адаптивность, breakpoints, подходы)
+- **[Apple HIG (Human Interface Guidelines)](https://developer.apple.com/design/human-interface-guidelines/)** — основы навигации, жесты, размеры touch-элементов, обратная связь.
+- **[Google MD (Material Design)](https://m3.material.io/)** — принципы Material Design, адаптивность, интерактивность, анимации.
+- **[WCAG (Web Content Accessibility Guidelines)](https://www.w3.org/WAI/standards-guidelines/wcag/)** — доступность, контрастность, размеры текста.
+
+Рекомендуемые минимальные размеры шрифтов для основного текста:
+- **Material Design:** 16px (12sp)
+- **HIG (iOS):** 17px
+- **WCAG:** 14px (для нормального зрения)
 
 ---
 
@@ -29,265 +34,535 @@
 
 #### **Шаг 1: Подготовка проекта**
 
-1. Продолжайте работу в том же репозитории, что и в Практическом занятии 3.
-2. Убедитесь, что у вас есть структурированный HTML и CSS, соответствующий выбранной методологии.
-3. Для работы с Flexbox, Grid, Masonry-раскладкой и медиазапросами используйте существующий макет. Вы можете создавать новые разделы или модифицировать существующие элементы.
+1. Продолжайте работу в том же репозитории, что и в предыдущих занятиях.
+2. Убедитесь, что у вас есть мобильная версия макета (или адаптивная вёрстка).
+3. Создайте отдельный CSS-файл для мобильных стилей (например, `mobile.css`) или используйте медиазапросы в основном файле.
+4. Подготовьте файл `menu.js` для работы гамбургер-меню.
+
+**Структура файлов:**
+```
+project/
+├── index.html
+├── styles/
+│   ├── style.css (основные стили)
+│   └── mobile.css (мобильные стили)
+├── scripts/
+│   └── menu.js (скрипт меню)
+└── README.md
+```
 
 ---
 
-#### **Шаг 2: Применение Flexbox для горизонтального меню**
+#### **Шаг 2: Полная реализация адаптивного меню (Desktop → Tablet → Mobile)**
 
-Используйте Flexbox для создания адаптивного навигационного меню. В шаге 5 предусмотрите изменение положения пунктов меню для мобольной версии.
-
-Пример реализации:
+**HTML-структура (index.html):**
 
 ```html
-<nav class="nav">
-    <ul class="nav__list">
-        <li class="nav__item">
-            <a href="#" class="nav__link">Главная</a>
-        </li>
-        <li class="nav__item">
-            <a href="#" class="nav__link">О проекте</a>
-        </li>
-        <li class="nav__item">
-            <a href="#" class="nav__link">Услуги</a>
-        </li>
-        <li class="nav__item">
-            <a href="#" class="nav__link">Контакты</a>
-        </li>
-    </ul>
-</nav>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мобильный интерфейс</title>
+    <!-- Подключение шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Основные стили -->
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Мобильные стили -->
+    <link rel="stylesheet" href="styles/mobile.css" media="screen and (max-width: 1024px)">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="#" class="logo">
+                    <img src="logo.svg" alt="Логотип" width="120" height="40">
+                </a>
+                
+                <!-- Гамбургер-кнопка (видна на планшетах и мобильных) -->
+                <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">
+                    <span class="menu-toggle__line"></span>
+                    <span class="menu-toggle__line"></span>
+                    <span class="menu-toggle__line"></span>
+                </button>
+                
+                <!-- Основная навигация -->
+                <nav class="nav" id="mainNav">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="#" class="nav__link active">Главная</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">О проекте</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">Услуги</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">Портфолио</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">Контакты</a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <!-- Кнопка CTA (только для десктопа) -->
+                <button class="btn btn--primary header__cta">Заказать</button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="main">
+        <!-- Контент страницы -->
+    </main>
+    
+    <!-- Подключение JavaScript -->
+    <script src="scripts/menu.js"></script>
+</body>
+</html>
 ```
 
+**Основные стили (styles/style.css):**
+
 ```css
+/* Базовые настройки */
+:root {
+    --primary-color: #2c5530;
+    --secondary-color: #f0f0f0;
+    --text-color: #333;
+    --font-family: 'Roboto', sans-serif;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 16px; /* Минимум для MD */
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Десктопное меню */
+.header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+/* Логотип */
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* Основная навигация (десктоп) */
 .nav__list {
     display: flex;
-    justify-content: center;
-    gap: 2rem;
     list-style: none;
-    padding: 0;
-    margin: 0;
+    gap: 30px;
 }
 
 .nav__link {
     text-decoration: none;
-    color: #333;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 17px; /* HIG рекомендация */
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: var(--transition);
 }
 
-.nav__link:hover {
-    background-color: #f0f0f0;
-    color: #2c5530;
-}
-```
-
----
-
-#### **Шаг 3: Создание Grid-сетки для контентных блоков**
-
-Реализуйте адаптивную сетку для размещения контентных блоков. Можете использовать Grid для размещения карточек с преимуществами / особенностями производителя. В обоих макетах они расположены сразу после шапки сайта.
-
-Пример реализации сетки с Grid:
-
-```html
-<section class="content-grid">
-    <h2 class="content-grid__title">Наши направления</h2>
-    <div class="content-grid__container">
-        <article class="content-card">
-            <h3 class="content-card__title">Направление 1</h3>
-            <p class="content-card__text">Описание первого направления деятельности.</p>
-        </article>
-        <article class="content-card">
-            <h3 class="content-card__title">Направление 2</h3>
-            <p class="content-card__text">Описание второго направления деятельности.</p>
-        </article>
-        <article class="content-card">
-            <h3 class="content-card__title">Направление 3</h3>
-            <p class="content-card__text">Описание третьего направления деятельности.</p>
-        </article>
-        <article class="content-card">
-            <h3 class="content-card__title">Направление 4</h3>
-            <p class="content-card__text">Описание четвёртого направления деятельности.</p>
-        </article>
-    </div>
-</section>
-```
-
-```css
-.content-grid__container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+.nav__link:hover,
+.nav__link.active {
+    background: var(--secondary-color);
+    color: var(--primary-color);
 }
 
-.content-card {
-    padding: 1.5rem;
-    background: #f8f9fa;
+/* Кнопки */
+.btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px 24px;
+    border: none;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
-    transition: transform 0.3s ease;
-}
-
-.content-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-```
-
----
-
-#### **Шаг 4: Реализация Masonry-раскладки (!данный пункт выполняется по желанию)**
-
-Создайте нестандартную сетку с элементами разной высоты. Примеры реализации представлены в Лекции 4.
-
-Один из форматов также продублирован ниже:
-
-```html
-<section class="masonry-grid">
-    <h2 class="masonry-grid__title">Дополнительные материалы</h2>
-    <div class="masonry-grid__container">
-        <article class="masonry-item masonry-item--short">
-            <h3 class="masonry-item__title">Краткий материал</h3>
-            <p class="masonry-item__text">Короткое описание.</p>
-        </article>
-        <article class="masonry-item masonry-item--tall">
-            <h3 class="masonry-item__title">Подробный материал</h3>
-            <p class="masonry-item__text">Развёрнутое описание с дополнительной информацией и деталями реализации.</p>
-        </article>
-        <article class="masonry-item">
-            <h3 class="masonry-item__title">Стандартный материал</h3>
-            <p class="masonry-item__text">Обычное описание материала средней длины.</p>
-        </article>
-        <article class="masonry-item masonry-item--very-tall">
-            <h3 class="masonry-item__title">Обширный материал</h3>
-            <p class="masonry-item__text">Полное описание со всеми техническими характеристиками, особенностями применения и рекомендациями по использованию в различных условиях.</p>
-        </article>
-        <!-- Сюда можно добавить сколь угодно элементов разной высоты -->
-    </div>
-</section>
-```
-
-```css
-.masonry-grid__container {
-    column-count: 3;
-    column-gap: 24px;
-}
-
-.masonry-item {
-    display: inline-block;
-    margin: 0 0 1em;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-    transition: transform 0.3s ease;
-}
-
-.masonry-item--short {
-    grid-row-end: span 15;
-}
-
-.masonry-item--tall {
-    grid-row-end: span 30;
-}
-
-.masonry-item--very-tall {
-    grid-row-end: span 40;
-}
-```
-
----
-
-#### **Шаг 5: Реализация адаптивности (Desktop First)**
-
-Добавьте медиазапросы для адаптации интерфейса к разным устройствам. Рекомендуется использовать подход Desktop First так как у вас уже был реализован веб-интерфейс для десктопной версии.
-
-Пример реализации данного подхода (изменяем только размер и цвет шрифта):
-
-```css
-.text {
-  color: navy; 
-  font-size: 18px;
-}
-
-/* Ноутбуки (меньше 1200px) */
-@media (max-width: 1199px) {
-  .text {
-    color: darkblue; 
-  }
-}
-
-/* Планшеты (меньше 992px) */
-@media (max-width: 991px) {
-  .text {
-    color: blue; 
-  }
-}
-
-/* Мобильные в альбомной ориентации (меньше 768px) */
-@media (max-width: 767px) {
-  .text {
-    color: royalblue; 
-  }
-}
-
-/* Мобильные (меньше 576px) */
-@media (max-width: 575px) {
-  .text {
-    color: dodgerblue; 
     font-size: 16px;
-  }
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Очень маленькие экраны (меньше 400px) */
-@media (max-width: 399px) {
-  .text {
-    color: lightblue; 
-    font-size: 14px;
-  }
+.btn--primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn--primary:hover {
+    background: #1e3a23;
+    transform: translateY(-2px);
+}
+
+.btn--primary:active {
+    transform: scale(0.98);
+}
+
+/* Гамбургер-кнопка (скрыта на десктопе) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    padding: 12px 10px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.menu-toggle__line {
+    width: 100%;
+    height: 3px;
+    background: var(--text-color);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+/* Состояние открытого меню */
+.menu-toggle.active .menu-toggle__line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.menu-toggle.active .menu-toggle__line:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active .menu-toggle__line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* CTA кнопка в шапке */
+.header__cta {
+    margin-left: 20px;
+}
+```
+
+**Мобильные стили (styles/mobile.css):**
+
+```css
+/* Планшет (1024px и меньше) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .header__inner {
+        padding: 15px 0;
+    }
+    
+    .nav__list {
+        gap: 20px;
+    }
+    
+    .header__cta {
+        display: none; /* Скрываем CTA на планшетах */
+    }
+}
+
+/* Планшет и мобильные (768px и меньше) */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex; /* Показываем гамбургер */
+    }
+    
+    /* Основная навигация (скрыта по умолчанию) */
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        padding: 80px 30px 30px;
+        transition: right 0.4s ease;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+    
+    .nav.active {
+        right: 0;
+    }
+    
+    .nav__list {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .nav__item {
+        width: 100%;
+    }
+    
+    .nav__link {
+        display: block;
+        width: 100%;
+        padding: 15px 0;
+        font-size: 18px; /* Увеличиваем для мобильных */
+        border-bottom: 1px solid #eee;
+    }
+    
+    .nav__link:hover,
+    .nav__link.active {
+        background: transparent;
+        color: var(--primary-color);
+        padding-left: 10px;
+    }
+    
+    /* Затемнение фона при открытом меню */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+    }
+    
+    .nav-overlay.active {
+        display: block;
+    }
+    
+    /* Увеличиваем touch-зоны */
+    .btn {
+        min-width: 120px;
+    }
+}
+
+/* Мобильные (480px и меньше) */
+@media (max-width: 480px) {
+    .nav {
+        width: 100%;
+    }
+    
+    .logo img {
+        width: 100px;
+        height: auto;
+    }
+    
+    body {
+        font-size: 17px; /* iOS рекомендация */
+    }
+}
+```
+
+**JavaScript для меню (scripts/menu.js):**
+
+```javascript
+// Получаем элементы
+const menuToggle = document.getElementById('menuToggle');
+const mainNav = document.getElementById('mainNav');
+
+// Создаем оверлей для меню
+const navOverlay = document.createElement('div');
+navOverlay.className = 'nav-overlay';
+document.body.appendChild(navOverlay);
+
+// Функция открытия/закрытия меню
+function toggleMenu() {
+    const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    
+    // Переключаем состояния
+    menuToggle.classList.toggle('active');
+    menuToggle.setAttribute('aria-expanded', !isExpanded);
+    mainNav.classList.toggle('active');
+    navOverlay.classList.toggle('active');
+    
+    // Блокируем скролл при открытом меню
+    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+}
+
+// Обработчики событий
+menuToggle.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', toggleMenu);
+
+// Закрытие меню при клике на ссылку
+const navLinks = document.querySelectorAll('.nav__link');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            toggleMenu();
+        }
+    });
+});
+
+// Закрытие меню при нажатии Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+        toggleMenu();
+    }
+});
+
+// Закрытие меню при изменении размера окна (если перешли на десктоп)
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
+        toggleMenu();
+    }
+});
+```
+
+---
+
+#### **Шаг 3: Проверка размеров шрифтов в соответствии с гайдлайнами**
+
+Добавьте в CSS проверочные классы для контроля размеров:
+
+```css
+/* Проверочные классы для контроля минимальных размеров */
+.font-check {
+    position: relative;
+    padding: 10px;
+    margin: 20px 0;
+    border-left: 4px solid;
+}
+
+.font-check.md {
+    border-color: #4285f4;
+    background: rgba(66, 133, 244, 0.1);
+}
+
+.font-check.hig {
+    border-color: #000000;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.font-check.wcag {
+    border-color: #0c9d58;
+    background: rgba(12, 157, 88, 0.1);
+}
+
+/* Минимальные размеры согласно гайдлайнам */
+:root {
+    --font-min-md: 16px;
+    --font-min-hig: 17px;
+    --font-min-wcag: 14px;
+}
+
+/* Применение минимальных размеров для body */
+body {
+    font-size: max(var(--font-min-md), var(--font-min-hig), 1rem);
+}
+
+/* Для кнопок и интерактивных элементов */
+.btn, .nav__link {
+    font-size: max(16px, 1em);
+}
+
+/* Медиазапрос для iOS устройств */
+@supports (-webkit-touch-callout: none) {
+    body {
+        font-size: max(var(--font-min-hig), 1rem);
+    }
 }
 ```
 
 ---
 
-#### **Шаг 6: Проверка и публикация**
+#### **Шаг 4: Публикация и отчёт**
 
-1. Протестируйте отображение на разных размерах экрана с помощью инструментов разработчика
-2. Убедитесь в корректности работы Flexbox, Grid и медиазапросов
-3. Проверьте соответствие кода выбранной методологии
-4. Зафиксируйте изменения в системе контроля версий
-5. Опубликуйте обновлённую версию на GitHub Pages
+1. Зафиксируйте изменения в Git:
+   ```bash
+   git add .
+   git commit -m "Реализация мобильного интерфейса с гамбургер-меню"
+   git push origin main
+   ```
 
----
+2. Опубликуйте на GitHub Pages через настройки репозитория.
 
-### **Критерии оценивания**
+3. **Обязательно сгенерируйте QR-код** для вашего GitHub Pages по ссылке: [https://qr-online.ru/](https://qr-online.ru/)
 
-1. **Семантическая вёрстка** — корректное использование HTML5-тегов
-2. **Flexbox** — навигация реализована с использованием flex-контейнера
-3. **Grid** — созданы две разные сетки (равномерная и masonry)
-5. **Медиазапросы** — реализован Desktop First подход с breakpoints
-6. **Адаптивность** — страница корректно отображается на всех типах устройств
-7. **Качество кода** — чистый, хорошо структурированный код без ошибок
-
----
-
-### **Дополнительные задания (по желанию)**
-
-1. Добавьте плавные анимации при изменении размеров сетки.
-2. Попробуйте изменить основные цвета интерфейса при переключении между различным типами устройств (изменении ширины экрана).
+4. В комментариях укажите:
+   - Использованные гайдлайны (HIG/MD/WCAG)
+   - Минимальный размер шрифта 
+   - Количество и значения breakpoints
+   - **Ссылку на GitHub Pages и QR-код**
 
 ---
 
 ### **Формат отчёта**
 
-1. В область для загрузки прикреплена ссылка на GitHub Pages/
-2. В комментариях к ответу прописаны реализованные breakpoints. Пример: реализовано 3 breakpoints (320px, 720px, 1024px)
+1. В область для загрузки прикреплена:
+   - Ссылка на GitHub Pages
+   - **QR-код для быстрого доступа с мобильного устройства**
+
+2. В комментариях указаны:
+   - Использованный гайдлайн (HIG/MD/WCAG)
+   - Минимальный размер шрифта
+   - Количество breakpoints: 3 (480px, 768px, 1024px)
+   - Реализованные фичи
 
 ---
+
+### **Чек-лист самопроверки**
+
+Перед отправкой работы проверьте:
+
+- [ ] Все кнопки и ссылки имеют размер не менее 44×44 px
+- [ ] Навигация удобна для использования одним пальцем
+- [ ] Есть визуальный feedback при нажатии на элементы
+- [ ] Гамбургер-меню работает корректно на мобильных устройствах
+- [ ] Шрифты соответствуют выбранным гайдлайнам (мин. 16px для MD, 17px для HIG)
+- [ ] Контент адаптируется под экраны от 320 px
+- [ ] Нет горизонтального скролла на мобильных устройствах
+- [ ] Код проходит валидацию (HTML/CSS/JS)
+- [ ] Страница загружается быстро на мобильном интернете
+- [ ] **QR-код корректно ведёт на GitHub Pages**
+
+---
+
+### **Пример QR-кода в отчёте**
+
+```
+GitHub Pages: https://ваш-username.github.io/ваш-репозиторий/
+
+QR-код:
+[ЗДЕСЬ РАСПОЛОЖЕН ВАШ QR-КОД]
+```
+
+**Как создать QR-код:**
+1. Перейдите на [https://qr-online.ru/](https://qr-online.ru/)
+2. Вставьте ссылку на ваш GitHub Pages
+3. Скачайте изображение QR-кода
+4. Вставьте его в отчёт
+
+---
+
+**Важно:** QR-код позволяет быстро протестировать вашу мобильную версию прямо с телефона, что соответствует цели занятия — проработке мобильного интерфейса.
 
 ### **Чек-лист самопроверки**
 
