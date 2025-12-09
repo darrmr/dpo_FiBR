@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мобильный интерфейс</title>
+    <link rel="icon" href="assets/ng.png" type="image/x-icon">
+    <!-- Подключение шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Основные стили -->
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Мобильные стили -->
+    <link rel="stylesheet" href="styles/mobile.css" media="screen and (max-width: 1024px)">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="#" class="logo">
+                    <img src="assets/ng.png" alt="Логотип" height="40">
+                </a>
+
+                <!-- Гамбургер-кнопка (видна на планшетах и мобильных) -->
+                <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">
+                    <span class="menu-toggle__line"></span>
+                    <span class="menu-toggle__line"></span>
+                    <span class="menu-toggle__line"></span>
+                </button>
+
+                <!-- Основная навигация -->
+                <nav class="nav" id="mainNav">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="#" class="nav__link active">Главная</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">О проекте</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">Услуги</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">Портфолио</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#" class="nav__link">Контакты</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Кнопка CTA (только для десктопа) -->
+                <button class="btn btn--primary header__cta">Заказать</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <fieldset class="snow-toggle">
+            <legend class="snow-toggle__label">Переключатель осадков</legend>
+            <label class="snow-toggle__item">
+                <input class="snow-toggle__control" type="radio" name="snow" value="snowfall" checked>
+                <span class="snow-toggle__text">Снег</span>
+            </label>
+            <label class="snow-toggle__item">
+                <input class="snow-toggle__control" type="radio" name="snow" value="none">
+                <span class="snow-toggle__text">Без осадков</span>
+            </label>
+        </fieldset>
+    </main>
+
+    <div class="snow" aria-hidden="true">
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+        <div class="snow__flake">﹡</div>
+    </div>
+
+
+    <!-- Подключение JavaScript -->
+    <script>
+        const storageKey = 'snow'
+        const snow = document.querySelector('.snow')
+        const snowflakes = document.querySelectorAll('.snow__flake')
+        const snowToggle = document.querySelector('.snow-toggle')
+
+        function getRndInteger(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min
+        }
+
+        function getRndFloat(min, max) {
+            return (Math.random() * (max - min) + min).toFixed(1)
+        }
+
+        snowflakes.forEach(snowflake => {
+            snowflake.style.fontSize = getRndFloat(0.7, 1.5) + 'em'
+            snowflake.style.animationDuration = getRndInteger(20, 30) + 's'
+            snowflake.style.animationDelay = getRndInteger(-1, snowflakes.length / 2) + 's'
+        })
+
+        function changeSnowAnimation(animationName) {
+            snow.style.setProperty('--animation-name', animationName)
+        }
+
+        snowToggle.addEventListener('change', event => {
+            changeSnowAnimation(event.target.value)
+            localStorage.setItem(storageKey, event.target.value)
+        })
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentStorage = localStorage.getItem(storageKey)
+
+            if (currentStorage) {
+                snowToggle.querySelector(`.snow-toggle__control[value='${currentStorage}']`).checked = true
+            }
+
+            changeSnowAnimation(currentStorage)
+
+            window.addEventListener('storage', () => {
+                changeSnowAnimation(localStorage.getItem(storageKey))
+            })
+        })
+
+    </script>
+    <script src="scripts/menu.js"></script>
+</body>
+
+</html>
