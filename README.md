@@ -9,4 +9,6 @@
 |1|3|Практика 3|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_3)|
 |1|4|Практика 4|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_4)|
 |1|5|Практика 5|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_5)|
-|1|6|Практика 6|Ссылка скоро будет|
+|1|5|Практика 6|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_6)|
+|1|6|Практика 7|Ссылка скоро будет|
+|1|6|Практика 8|Ссылка скоро будет|
