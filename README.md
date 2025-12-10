@@ -23,6 +23,8 @@
 - **[Google MD (Material Design)](https://m3.material.io/)** — принципы Material Design, адаптивность, интерактивность, анимации.
 - **[WCAG (Web Content Accessibility Guidelines)](https://www.w3.org/WAI/standards-guidelines/wcag/)** — доступность, контрастность, размеры текста.
 
+Примеры реализации рассматриваемых элементов можете найти в [ветке](https://github.com/darrmr/dpo_FiBR/tree/pr_5)
+
 ---
 
 ### **Последовательность выполнения работы**
