@@ -3,26 +3,28 @@
     .container {
         padding: 0 15px;
     }
-    
+
     .header__inner {
         padding: 15px 0;
     }
-    
+
     .nav__list {
         gap: 20px;
     }
-    
+
     .header__cta {
-        display: none; /* Скрываем CTA на планшетах */
+        display: none;
+        /* Скрываем CTA на планшетах */
     }
 }
 
 /* Планшет и мобильные (768px и меньше) */
 @media (max-width: 768px) {
     .menu-toggle {
-        display: flex; /* Показываем гамбургер */
+        display: flex;
+        /* Показываем гамбургер */
     }
-    
+
     /* Основная навигация (скрыта по умолчанию) */
     .nav {
         position: fixed;
@@ -31,41 +33,42 @@
         width: 300px;
         height: 100vh;
         background: rgba(255, 255, 255, 0.75);
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         padding: 80px 30px 30px;
         transition: right 0.4s ease;
         z-index: 1000;
         overflow-y: auto;
     }
-    
+
     .nav.active {
         right: 0;
     }
-    
+
     .nav__list {
         flex-direction: column;
         gap: 0;
     }
-    
+
     .nav__item {
         width: 100%;
     }
-    
+
     .nav__link {
         display: block;
         width: 100%;
         padding: 15px 0;
-        font-size: 18px; /* Увеличиваем для мобильных */
+        font-size: 18px;
+        /* Увеличиваем для мобильных */
         border-bottom: 1px solid #eee;
     }
-    
+
     .nav__link:hover,
     .nav__link.active {
         background: transparent;
         color: var(--primary-color);
         padding-left: 10px;
     }
-    
+
     /* Затемнение фона при открытом меню */
     .nav-overlay {
         display: none;
@@ -74,17 +77,29 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 999;
     }
-    
+
     .nav-overlay.active {
         display: block;
     }
-    
+
     /* Увеличиваем touch-зоны */
     .btn {
         min-width: 120px;
+    }
+
+    .scroll-top {
+        width: 52px;
+        height: 52px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 22px;
+    }
+
+    .header {
+        position: sticky;
     }
 }
 
@@ -93,14 +108,15 @@
     .nav {
         width: 100%;
     }
-    
+
     .logo img {
         width: 100px;
         height: auto;
     }
-    
+
     body {
-        font-size: 17px; /* iOS рекомендация */
+        font-size: 17px;
+        /* iOS рекомендация */
     }
 }
 
@@ -140,7 +156,8 @@ body {
 }
 
 /* Для кнопок и интерактивных элементов */
-.btn, .nav__link {
+.btn,
+.nav__link {
     font-size: max(16px, 1em);
 }
 

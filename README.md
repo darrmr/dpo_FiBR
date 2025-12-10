@@ -493,7 +493,141 @@ body {
 
 ---
 
-#### **Шаг 4: Публикация и отчёт**
+### **Шаг 4: Фиксация меню в верхней части экрана для мобильной версии**
+
+Добавим свойство `position: sticky` для мобильной версии, чтобы меню всегда было доступно при скролле.
+
+**Добавьте в `mobile.css`:**
+
+```css
+/* Мобильные (768px и меньше) */
+@media (max-width: 768px) {
+    .header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1002; /* Выше оверлея */
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .menu-toggle {
+        position: relative;
+        z-index: 1003; /* Выше шапки */
+    }
+
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        padding: 80px 30px 30px;
+        transition: right 0.4s ease;
+        z-index: 1001;
+        overflow-y: auto;
+    }
+}
+```
+
+---
+
+### **Шаг 5: Добавление кнопки «Наверх» (Scroll to Top)**
+
+Кнопка будет появляться, когда пользователь прокрутил страницу вниз, и позволит мгновенно вернуться к началу.
+
+**Добавьте в `index.html` перед закрывающим тегом `</body>`:**
+
+```html
+<!-- Кнопка "Наверх" -->
+<button class="scroll-top" id="scrollTop" aria-label="Наверх">
+    ↑
+</button>
+```
+
+**Добавьте стили в `style.css`:**
+
+```css
+/* Кнопка "Наверх" */
+.scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-top:hover {
+    background: #1e3a23;
+    transform: scale(1.1);
+}
+
+.scroll-top:active {
+    transform: scale(0.95);
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .scroll-top {
+        width: 52px;
+        height: 52px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 22px;
+    }
+}
+```
+
+**Добавьте скрипт в `menu.js` (в конец файла):**
+
+```javascript
+// Кнопка "Наверх"
+const scrollTopButton = document.getElementById('scrollTop');
+
+// Показываем кнопку после скролла
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        scrollTopButton.classList.add('visible');
+    } else {
+        scrollTopButton.classList.remove('visible');
+    }
+});
+
+// Прокрутка к началу страницы
+scrollTopButton.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+```
+
+---
+
+
+#### **Шаг 6: Публикация и отчёт**
 
 1. Зафиксируйте изменения в Git:
    ```bash
@@ -506,25 +640,14 @@ body {
 
 3. **Обязательно сгенерируйте QR-код** для вашего GitHub Pages по ссылке: [https://qr-online.ru/](https://qr-online.ru/)
 
-4. В комментариях укажите:
-   - Использованные гайдлайны (HIG/MD/WCAG)
-   - Минимальный размер шрифта 
-   - Количество и значения breakpoints
-   - **Ссылку на GitHub Pages и QR-код**
 
 ---
 
 ### **Формат отчёта**
 
-1. В область для загрузки прикреплена:
+В область для загрузки прикреплена:
    - Ссылка на GitHub Pages
-   - **QR-код для быстрого доступа с мобильного устройства**
-
-2. В комментариях указаны:
-   - Использованный гайдлайн (HIG/MD/WCAG)
-   - Минимальный размер шрифта
-   - Количество breakpoints: 3 (480px, 768px, 1024px)
-   - Реализованные фичи
+   - **QR-код на GitHub Pages**
 
 ---
 
@@ -536,28 +659,22 @@ body {
 - [ ] Есть визуальный feedback при нажатии на элементы
 - [ ] Гамбургер-меню работает корректно на мобильных устройствах
 - [ ] Шрифты соответствуют выбранным гайдлайнам (мин. 16px для MD, 17px для HIG)
-- [ ] Контент адаптируется под экраны от 320 px
+- [ ] Контент адаптируется под экраны 
 - [ ] Нет горизонтального скролла на мобильных устройствах
 - [ ] Код проходит валидацию (HTML/CSS/JS)
-- [ ] Страница загружается быстро на мобильном интернете
+- [ ] Меню фиксируется вверху на мобильных устройствах
+- [ ] Кнопка «Наверх» появляется после прокрутки
+- [ ] Кнопка «Наверх» плавно прокручивает страницу в начало
+- [ ] Кнопка «Наверх» адаптирована под touch-устройства (достаточный размер)
 - [ ] **QR-код корректно ведёт на GitHub Pages**
 
 ---
 
-### **Пример QR-кода в отчёте**
-
-```
-GitHub Pages: https://ваш-username.github.io/ваш-репозиторий/
-
-QR-код:
-[ЗДЕСЬ РАСПОЛОЖЕН ВАШ QR-КОД]
-```
-
-**Как создать QR-код:**
+### **Как создать QR-код:**
 1. Перейдите на [https://qr-online.ru/](https://qr-online.ru/)
 2. Вставьте ссылку на ваш GitHub Pages
 3. Скачайте изображение QR-кода
-4. Вставьте его в отчёт
+4. Добавьте его в область загрузки ответа или в README.md
 
 ---
 
