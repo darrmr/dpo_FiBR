@@ -17,16 +17,11 @@
 
 ### **Введение и теоретическая база**
 
-Перед выполнением практики обязательно ознакомьтесь с основными гайдлайнами:
+Перед выполнением практики обязательно ознакомьтесь с основными гайдлайнами и лекционным материалом:
 
 - **[Apple HIG (Human Interface Guidelines)](https://developer.apple.com/design/human-interface-guidelines/)** — основы навигации, жесты, размеры touch-элементов, обратная связь.
 - **[Google MD (Material Design)](https://m3.material.io/)** — принципы Material Design, адаптивность, интерактивность, анимации.
 - **[WCAG (Web Content Accessibility Guidelines)](https://www.w3.org/WAI/standards-guidelines/wcag/)** — доступность, контрастность, размеры текста.
-
-Рекомендуемые минимальные размеры шрифтов для основного текста:
-- **Material Design:** 16px (12sp)
-- **HIG (iOS):** 17px
-- **WCAG:** 14px (для нормального зрения)
 
 ---
 
@@ -438,62 +433,17 @@ window.addEventListener('resize', () => {
 
 ---
 
-#### **Шаг 3: Проверка размеров шрифтов в соответствии с гайдлайнами**
+#### **Шаг 3: Проверка размеров шрифтов**
 
-Добавьте в CSS проверочные классы для контроля размеров:
-
-```css
-/* Проверочные классы для контроля минимальных размеров */
-.font-check {
-    position: relative;
-    padding: 10px;
-    margin: 20px 0;
-    border-left: 4px solid;
-}
-
-.font-check.md {
-    border-color: #4285f4;
-    background: rgba(66, 133, 244, 0.1);
-}
-
-.font-check.hig {
-    border-color: #000000;
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.font-check.wcag {
-    border-color: #0c9d58;
-    background: rgba(12, 157, 88, 0.1);
-}
-
-/* Минимальные размеры согласно гайдлайнам */
-:root {
-    --font-min-md: 16px;
-    --font-min-hig: 17px;
-    --font-min-wcag: 14px;
-}
-
-/* Применение минимальных размеров для body */
-body {
-    font-size: max(var(--font-min-md), var(--font-min-hig), 1rem);
-}
-
-/* Для кнопок и интерактивных элементов */
-.btn, .nav__link {
-    font-size: max(16px, 1em);
-}
-
-/* Медиазапрос для iOS устройств */
-@supports (-webkit-touch-callout: none) {
-    body {
-        font-size: max(var(--font-min-hig), 1rem);
-    }
-}
-```
+Проверьте размеры шрифтов для основного контента. 
+Рекомендуемые гайдлайнами минимальные размеры шрифтов для основного текста:
+- **Material Design:** 16px (12sp)
+- **HIG (iOS):** 17px
+- **WCAG:** 14px (для нормального зрения)
 
 ---
 
-### **Шаг 4: Фиксация меню в верхней части экрана для мобильной версии**
+#### **Шаг 4: Фиксация меню в верхней части экрана для мобильной версии**
 
 Добавим свойство `position: sticky` для мобильной версии, чтобы меню всегда было доступно при скролле.
 
@@ -504,38 +454,13 @@ body {
 @media (max-width: 768px) {
     .header {
         position: sticky;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1002; /* Выше оверлея */
-        background: white;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .menu-toggle {
-        position: relative;
-        z-index: 1003; /* Выше шапки */
-    }
-
-    .nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 300px;
-        height: 100vh;
-        background: white;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        padding: 80px 30px 30px;
-        transition: right 0.4s ease;
-        z-index: 1001;
-        overflow-y: auto;
     }
 }
 ```
 
 ---
 
-### **Шаг 5: Добавление кнопки «Наверх» (Scroll to Top)**
+#### **Шаг 5: Добавление кнопки «Наверх» (Scroll to Top)**
 
 Кнопка будет появляться, когда пользователь прокрутил страницу вниз, и позволит мгновенно вернуться к началу.
 
