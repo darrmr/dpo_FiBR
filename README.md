@@ -6,210 +6,268 @@
 
 ---
 
-### **Практическое занятие 7: Работа с CSS-фреймворками 1**
+### **Практическое занятие 8: Работа с CSS-фреймворками 2**
 
 ---
 
 ### **Цель:**  
-Научиться проектировать структуру веб-проекта и создавать чистый, минималистичный лендинг с использованием современных CSS-фреймворков. Закрепить навыки работы с инструментами визуального проектирования и компонентным подходом в вёрстке.
+Расширить одностраничный лендинг до полноценного многостраничного проекта с использованием CSS-фреймворка. Научиться создавать вспомогательные страницы и обеспечивать целостность навигации между страницами.
 
 ---
 
 ### **Введение и теоретическая база**
 
-Перед выполнением практики ознакомьтесь с материалами Лекций 6 и 7
+Перед выполнением практики повторите материалы Лекций 6 и 7 по работе с CSS-фреймворками, а также ознакомьтесь с принципами построения многостраничных сайтов.
 
 ---
 
 ### **Последовательность выполнения работы**
 
-#### **Шаг 1: Выбор темы и проектирование карты сайта**
+#### **Шаг 1: Подготовка проекта и навигации**
 
-1. Выберите тематику работы (аналогично формату, представленному в Практическом занятии 6). Еще несколько примеров тем:
-   - Сервис доставки здорового питания
-   - Приложение для медитации
-   - Онлайн-курс по программированию
-   - Эко-магазин
-   - Портфолио дизайнера
+1. Продолжайте работу в том же репозитории, что и в Практическом занятии 7.
+2. Обновите навигационное меню в хедере, добавив ссылки на новые страницы:
+   - Главная
+   - Контакты / Отзывы
+   - FAQ (это может быть отдельный блок внутри другой страницы)
+3. Создайте базовую структуру файлов:
 
-2. Создайте карту сайта в формате Mind Map. Можно использовать сервис **BoardMix** или аналогичном сервисте (Miro, FigJam и другие).
-   - Определите основные страницы и разделы.
-   - Продумайте навигацию и связи между страницами.
-   - Укажите ключевые блоки на каждой странице (хедер, герой, преимущества, отзывы, футер и т.д.).
-
-3. Сохраните карту сайта как изображение и добавьте в отчет.
-
-Примеры карт сайта представлен в Лекции 6.
-
-Примеры макетов лендингов, на которые можно ориентироваться:
-![Лендинги](img/Mini_lend.png)
-
----
-
-#### **Шаг 2: Выбор CSS-фреймворка**
-
-Выберите один из фреймворков, рассмотренных на Лекции 7:
-
-- 19-21 Bootstrap
-- 22-25 Bulma
-- 26-28 Foundation
-- 29-31 Fomantic UI 
-- 32-34 Blaze UI 
-- 35-37 Vanilla Framework
-- 40-43 Tailwind
-- 44-47 Open Props 
-- 48-50 Tachyons
-- 51-53 Materialize
-- 56-59 Pure
-- 60-62 Miligram
-- 63-65 Chota
-- 66-69 Spectre
-- 70-73 Skeleton
-- 76-78 Water
-- 79-81 MVP
-- 84-88 UIKit
-
----
-
-#### **Шаг 3: Настройка проекта и подключение фреймворка**
-
-1. Работу рекомендуется начать в новом репозитории.
-2. Инициализируйте HTML-структуру.
-3. Подключите выбранный CSS-фреймворк через CDN или локально.
-
-Относительно подключения можно ориентироваться на документацию соответствующих фреймворков (ссылки представлены в Лекции 7)
-
-**Пример для Pure.css (HTML):**
-
-```html
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Минималистичный лендинг | Pure.css</title>
-    <!-- Pure CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
-</head>
-<body>
-    <!-- Контент -->
-</body>
-</html>
 ```
-
-**Пример для Bulma (HTML):**
-
-```html
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Минималистичный лендинг | Pure.css</title>
-    <!-- Bulma -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <!-- Подключаем иконки Font Awesome, пригодятся в реализации -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-</head>
-<body>
-    <!-- Контент -->
-</body>
-</html>
+project/
+├── index.html          # Главная страница (уже есть)
+├── contacts.html       # Страница контактов/отзывов
+├── faq.html            # Страница FAQ (не нужно, если FAQ - это блок какой либо из страниц)
+├── 404.html            # Страница 404
+└── assets/             # Изображения, иконки
 ```
 
 ---
 
-#### **Шаг 4: Создание минималистичного лендинга**
+#### **Шаг 2: Создание страницы "Контакты" или "Отзывы" с формой**
 
-Сверстайте одностраничный лендинг, используя компоненты и сетку выбранного фреймворка. Структура может включать:
+Создайте файл `contacts.html` и реализуйте:
 
-1. **Фиксированный хедер** с логотипом и навигацией
-2. **Герой-секцию** с заголовком, подзаголовком и кнопкой CTA / это также могут быть рекламные баннеры
-3. **Секцию «О проекте»** с текстом и изображением
-4. **Сетку карточек** (услуги, преимущества, особенности)
-5. **Футер** с контактами и ссылками на соцсети
+1. **Информационный блок** с контактными данными (адрес, телефон, email, соцсети).
+2. **Форма обратной связи** с полями:
+   - Имя (текстовое поле)
+   - Email (email поле)
+   - Тема (выпадающий список или текстовое поле)
+   - Сообщение (textarea)
+   - Чекбокс "Согласие на обработку данных"
+   - Кнопка отправки
 
-**Пример Hero-секции на Pure.css:**
-
-```html
-<div class="hero pure-g">
-    <div class="pure-u-1 pure-u-md-2-3">
-        <h1 class="hero-title">Здоровое питание с доставкой</h1>
-        <p class="hero-subtitle">Ежедневные рационы от шеф-повара. Без сахара, глютена и консервантов.</p>
-        <a href="#order" class="pure-button pure-button-primary">Заказать пробный день</a>
-    </div>
-    <div class="pure-u-1 pure-u-md-1-3">
-        <img src="assets/hero-image.svg" alt="Здоровое питание" class="pure-img">
-    </div>
-</div>
-```
-
-**Пример Hero-секции на Bulma:**
+**Пример формы на Bulma:**
 
 ```html
- <section class="hero is-success is-halfheight">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <h1 class="title is-1">
-                    Превратите идеи в реальность
-                </h1>
-                <h2 class="subtitle is-4">
-                    Мощный инструмент, который помогает вам достигать большего с меньшими усилиями. Просто, быстро,
-                    эффективно.
-                </h2>
-                <div class="buttons is-centered">
-                    <a href="#pricing" class="button is-large is-light">
-                        <span>Выбрать план</span>
-                        <span class="icon">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-                    <a href="#how-it-works" class="button is-large is-outlined is-light">
-                        <span class="icon">
-                            <i class="fas fa-play"></i>
-                        </span>
-                        <span>Смотреть видео</span>
-                    </a>
+<section class="section">
+    <div class="container">
+        <h2 class="title is-2">Оставьте отзыв</h2>
+        <div class="columns">
+            <div class="column is-6">
+                <form id="feedbackForm">
+                    <div class="field">
+                        <label class="label">Имя</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Ваше имя" required>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input class="input" type="email" placeholder="example@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="label">Тема</label>
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select required>
+                                    <option value="" disabled selected>Выберите тему</option>
+                                    <option>Предложение</option>
+                                    <option>Жалоба</option>
+                                    <option>Вопрос</option>
+                                    <option>Благодарность</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="label">Сообщение</label>
+                        <div class="control">
+                            <textarea class="textarea" placeholder="Ваше сообщение..." rows="5" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" required>
+                                Соглашаюсь на обработку персональных данных
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Отправить отзыв</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="column is-6">
+                <div class="content">
+                    <h3 class="title is-4">Контакты</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Примерная, 123</p>
+                    <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                    <p><i class="fas fa-envelope"></i> info@example.com</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 ```
 
 ---
 
-#### **Шаг 5: Адаптивность и доступность**
+#### **Шаг 3: Создание страницы FAQ**
 
-1. Протестируйте навигацию с клавиатуры (Tab, Enter).
+Создайте файл `faq.html` (или блок внутри другой страницы) с аккордеоном/спойлерами часто задаваемых вопросов.
+
+**Пример FAQ на Bootstrap:**
+
+```html
+<section class="container py-5">
+    <h2 class="text-center mb-5">Часто задаваемые вопросы</h2>
+    
+    <div class="accordion" id="faqAccordion">
+
+        <div class="accordion-item">
+            <h3 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    Как начать пользоваться сервисом?
+                </button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Зарегистрируйтесь на сайте, подтвердите email и начните пользоваться бесплатным тарифом. Все функции доступны сразу после регистрации.
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item">
+            <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    Есть ли мобильное приложение?
+                </button>
+            </h3>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Да, наше приложение доступно в App Store и Google Play. Все функции синхронизируются между веб-версией и приложением.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Тут еще 3-5 вопросов -->
+    </div>
+</section>
+```
 
 ---
 
-#### **Шаг 6: Публикация и документирование**
+#### **Шаг 4: Создание страницы 404**
+
+Создайте креативную и полезную страницу 404 (`404.html`), которая поможет пользователю вернуться на сайт.
+
+**Пример на Tailwind:**
+
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена | Название проекта</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="text-center px-4">
+        <h1 class="text-9xl font-bold text-gray-800">404</h1>
+        <h2 class="text-3xl font-semibold text-gray-700 mt-4">Ой! Страница не найдена</h2>
+        <p class="text-gray-600 mt-2 max-w-md mx-auto">
+            Возможно, эта страница была удалена или перемещена. Попробуйте вернуться на главную.
+        </p>
+        
+        <div class="mt-8 space-x-4">
+            <a href="index.html" 
+               class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                На главную
+            </a>
+            <a href="contacts.html" 
+               class="inline-block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition">
+                Связаться с нами
+            </a>
+        </div>
+        
+        <div class="mt-12">
+            <p class="text-gray-500">Или воспользуйтесь навигацией:</p>
+            <nav class="mt-4">
+                <a href="index.html" class="text-blue-600 hover:underline mx-3">Главная</a>
+                <a href="faq.html" class="text-blue-600 hover:underline mx-3">FAQ</a>
+                <a href="contacts.html" class="text-blue-600 hover:underline mx-3">Контакты</a>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>
+```
+
+---
+
+#### **Шаг 5: Единообразие дизайна и навигации**
+
+1. Убедитесь, что на всех страницах одинаковые header и footer
+2. Добавьте активное состояние для пунктов меню в зависимости от текущей страницы.
+3. Проверьте, что все ссылки работают корректно.
+
+---
+
+#### **Шаг 6: Публикация и тестирование**
 
 1. Зафиксируйте изменения в Git
-2. Опубликуйте на GitHub Pages.
-3. Добавьте в `README.md`:
-   - Тему проекта
-   - Название использованного фреймворка
+2. Опубликуйте обновленный проект на GitHub Pages.
+3. Протестируйте навигацию между страницами:
+   - Переходы по меню
+   - Ссылки в футере
+   - Форма на странице контактов
+   - Страница 404 при переходе на несуществующий URL
 
 ---
 
 ### **Формат отчёта**
 
-В область для загрузки необходимо прикрепить:
-- Ссылку на GitHub Pages
-- Проработанную стуктуру сайта (карта сайта) в формате скриншота
+В область для загрузки необходимо прикрепить ссылку на GitHub Pages
 
 ---
 
 ### **Чек-лист самопроверки**
 
-- [ ] Карта сайта создана и отражает структуру проекта  
-- [ ] Лендинг свёрстан на выбранном CSS-фреймворке  
-- [ ] Дизайн минималистичный, без визуального шума  
-- [ ] Есть CTA-кнопки с понятными призывами  
-- [ ] Код проходит валидацию (HTML/CSS)  
-- [ ] Футер содержит контакты/соцсети  
+- [ ] Страница/блок FAQ содержит аккордеон/спойлеры с вопросами и ответами
+- [ ] Страница 404 стилизована и содержит полезные ссылки
+- [ ] Навигационное меню едино для всех страниц
+- [ ] Футер одинаков на всех страницах
+- [ ] Все страницы используют один CSS-фреймворк
+- [ ] Нет битых ссылок между страницами
+- [ ] Проект опубликован на GitHub Pages
+
+---
+
+### **Рекомендации**
+
+1. Страницу 404 можно сделать более интерактивной — добавить анимацию или поиск по сайту
+2. На странице контактов можно добавить карту (через iframe от Яндекс.Карт или Google Maps)
+3. Сохраняйте минималистичный дизайн, не перегружайте страницы элементами
 
 ---
