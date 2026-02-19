@@ -115,6 +115,7 @@ button.addEventListener('click', function() {
     <style>
         .border-container { border: 2px solid #333; padding: 10px; }
         .bg-green { background-color: lightgreen; }
+        .red-text { color: red; }
     </style>
 </head>
 <body>
