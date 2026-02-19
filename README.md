@@ -4,217 +4,237 @@
 |ДИСЦИПЛИНА|Основы фронтенд-разработки|
 |ВИД УЧЕБНОГО МАТЕРИАЛА|Методические указания к практическим занятиям|
 
-## **Практическое занятие 11: Манипуляции с DOM и навигация по элементам**
+## **Практическое занятие 12: Обработка событий в JavaScript**
 
 ---
 
 ### **Цель:**
-Научиться создавать, изменять и удалять элементы DOM, навигировать по дереву документа, использовать data-атрибуты и применять стили через классы. Закрепить навыки поиска элементов и обработки событий для создания интерактивных интерфейсов.
+Научиться обрабатывать различные события на веб-странице: клики мыши, наведение курсора, нажатия клавиш, фокус на полях ввода. Закрепить навыки добавления обработчиков событий и изменения элементов страницы в ответ на действия пользователя.
 
 ---
 
 ### **Теоретическая справка**
 
-#### **1. Поиск элементов в DOM**
-Прежде чем что-то менять, элемент нужно найти.
+#### **Что такое события?**
+События — это сигналы, которые браузер отправляет JavaScript-коду о том, что пользователь что-то сделал: кликнул на кнопку, нажал клавишу, отправил форму и т.д.
 
+#### **Как добавить обработчик события**
+
+**Способ 1: addEventListener (рекомендуемый)**
 ```javascript
-// Поиск одного элемента (возвращает первый найденный)
-const container = document.getElementById('container');
-const specialElement = document.querySelector('.special'); // CSS-селектор
-
-// Поиск всех подходящих элементов (возвращает коллекцию NodeList)
-const allTextElements = document.querySelectorAll('.text');
-const allItems = document.getElementsByClassName('item'); // устаревший, но рабочий метод
-```
-
-#### **2. Навигация по DOM (перемещение между узлами)**
-Зная элемент, можно переместиться к соседям, родителям или детям.
-
-```javascript
-const currentElement = document.querySelector('.special');
-
-// Родитель
-const parent = currentElement.parentNode; // или parentElement
-
-// Дочерние элементы (только теги)
-const children = parent.children; // HTMLCollection
-
-// Соседи
-const next = currentElement.nextElementSibling; // следующий элемент
-const prev = currentElement.previousElementSibling; // предыдущий элемент
-
-// Поиск среди всех потомков конкретного элемента
-const nestedParagraph = parent.querySelector('p'); // ищет только внутри parent
-```
-
-#### **3. Создание и вставка элементов**
-```javascript
-// Создание
-const newLi = document.createElement('li');
-newLi.textContent = 'Новый пользователь';
-
-// Вставка в конец списка
-const list = document.getElementById('userList');
-list.appendChild(newLi);
-
-// Вставка в определенное место (например, в начало)
-const firstLi = list.firstElementChild;
-list.insertBefore(newLi, firstLi);
-
-// Более современный способ
-list.append(newLi); // в конец
-list.prepend(newLi); // в начало
-```
-
-#### **4. Работа с атрибутами и data-атрибутами**
-```javascript
-// Классы
-element.classList.add('highlight');
-element.classList.remove('text');
-element.classList.toggle('active'); // добавит, если нет; удалит, если есть
-
-// Стили (лучше менять через классы, но можно и напрямую)
-element.style.color = 'red';
-element.style.backgroundColor = 'green';
-
-// Дата-атрибуты
-const price = element.dataset.price; // получаем значение data-price
-console.log(Number(price)); // не забываем преобразовывать в число
-```
-
-#### **5. Обработка событий для динамических элементов**
-```javascript
+const button = document.querySelector('button');
 button.addEventListener('click', function() {
-    // Логика добавления нового элемента
-    const newItem = document.createElement('li');
-    newItem.textContent = 'Новый пользователь';
-    list.appendChild(newItem);
+    // код, который выполнится при клике
+    console.log('Кнопка нажата!');
 });
+```
+
+**Способ 2: через атрибут (только для простых случаев)**
+```javascript
+button.onclick = function() {
+    console.log('Кнопка нажата!');
+};
+```
+
+#### **Основные события**
+
+| Событие | Когда срабатывает |
+|---------|-------------------|
+| `click` | Клик левой кнопкой мыши |
+| `dblclick` | Двойной клик |
+| `mouseover` | Курсор наводится на элемент |
+| `mouseout` | Курсор уходит с элемента |
+| `keydown` | Клавиша нажата |
+| `keyup` | Клавиша отпущена |
+| `focus` | Поле ввода получает фокус |
+| `blur` | Поле ввода теряет фокус |
+| `submit` | Отправка формы |
+
+С остальными событиями и документацией можно ознакомиться в Лекции 9.
+
+#### **Объект события (event)**
+
+В обработчик автоматически передаётся объект с информацией о событии:
+
+```javascript
+button.addEventListener('click', function(event) {
+    console.log(event.type);        // тип события: "click"
+    console.log(event.target);       // элемент, на который кликнули
+    console.log(event.currentTarget); // элемент, на котором висит обработчик
+});
+```
+
+Для событий клавиатуры:
+```javascript
+input.addEventListener('keydown', function(event) {
+    console.log(event.key);      // символ клавиши: "a", "Enter", "ArrowUp"
+    console.log(event.code);      // код клавиши: "KeyA", "Enter", "ArrowUp"
+    console.log(event.ctrlKey);   // зажат ли Ctrl? true/false
+});
+```
+
+#### **Изменение стилей через JavaScript**
+
+```javascript
+element.style.backgroundColor = 'red';
+element.style.color = 'white';
+element.style.display = 'none';    // скрыть элемент
+element.style.display = 'block';   // показать элемент
 ```
 
 ---
 
-### **Пример выполнения работы**
+### **Разбор примеров**
 
-Рассмотрим аналогичную задачу:
 
-#### **Условие:**
-На странице есть контейнер `div` с параграфами. Нужно:
-1. Найти все параграфы с классом `text`.
-2. Третьему параграфу задать зеленый фон.
-3. Родительскому контейнеру добавить рамку.
+#### **Задача №1: Две разные кнопки**
+**Условие:** Создайте две кнопки на странице. При нажатии на первую кнопку должен выводиться текст "Нажата первая кнопка", а при нажатии на вторую кнопку должен выводиться текст "Нажата вторая кнопка".
 
-#### **Шаг 1: HTML-структура (основа)**
-```html
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Практика DOM</title>
-    <style>
-        .border-container { border: 2px solid #333; padding: 10px; }
-        .bg-green { background-color: lightgreen; }
-        .red-text { color: red; }
-    </style>
-</head>
-<body>
-    <div id="container">
-        <p class="text">Первый параграф</p>
-        <p class="text special">Второй параграф</p>
-        <p class="text">Третий параграф</p>
-        <p class="text">Четвёртый параграф</p>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
-```
-
-#### **Шаг 2: Реализация логики (script.js)**
+**Решение:**
 ```javascript
-// Ждем полной загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // 1. Находим все элементы с классом 'text'
-    const textElements = document.querySelectorAll('.text');
-    console.log('Найдено элементов с классом text:', textElements.length);
-    
-    // 2. Для элемента с классом 'special' устанавливаем красный цвет текста
-    // Используем querySelector, так как такой элемент один
-    const specialElement = document.querySelector('.special');
-    if (specialElement) {
-        // Добавляем стиль через класс (рекомендуется)
-        specialElement.classList.add('red-text');
-        // Или напрямую: specialElement.style.color = 'red';
-    }
-    
-    // 3. Для каждого третьего параграфа добавляем зелёный фон
-    // Помним, что индексация в коллекции начинается с 0.
-    // Нам нужен элемент с индексом 2 (третий по счету).
-    if (textElements.length >= 3) {
-        // Способ 1: Прямое обращение по индексу
-        textElements[2].classList.add('bg-green');
-        
-        // Способ 2: Более правильный для демонстрации цикла
-        // textElements.forEach((paragraph, index) => {
-        //     if (index === 2) { // индекс 2 означает третий элемент
-        //         paragraph.style.backgroundColor = 'lightgreen';
-        //     }
-        // });
-    }
-    
-    // 4. Родительскому контейнеру добавляем рамку
-    const container = document.getElementById('container');
-    if (container) {
-        container.classList.add('border-container');
-    }
+// Находим кнопки по их ID
+let firstButton = document.querySelector('#first-button');
+let secondButton = document.querySelector('#second-button');
+
+// Добавляем обработчики для каждой кнопки
+firstButton.addEventListener('click', () => {
+    console.log('Нажата первая кнопка');
+});
+
+secondButton.addEventListener('click', () => {
+    console.log('Нажата вторая кнопка');
 });
 ```
+
+**Как это работает:**
+- `#first-button` — селектор по ID (в HTML должно быть `id="first-button"`)
+- Каждая кнопка получает свой собственный обработчик
+
+**HTML, который нужен:**
+```html
+<button id="first-button">Кнопка 1</button>
+<button id="second-button">Кнопка 2</button>
+```
+
+---
+
+#### **Задача №2: Изменение цвета при наведении**
+**Условие:** Создайте блок на странице. При наведении мыши на блок должен меняться его цвет на красный.
+
+**Решение:**
+```javascript
+// Находим блок по классу
+let block = document.querySelector('.block');
+
+// При наведении мыши меняем цвет на красный
+block.addEventListener('mouseover', () => {
+    block.style.backgroundColor = 'red';
+});
+
+// Когда мышь уходит, возвращаем исходный цвет (добавим для удобства)
+block.addEventListener('mouseout', () => {
+    block.style.backgroundColor = ''; // вернёт цвет по умолчанию
+});
+```
+
+**Как это работает:**
+- `mouseover` — срабатывает, когда курсор оказывается над элементом
+- `mouseout` — срабатывает, когда курсор покидает элемент
+- `element.style.backgroundColor` — изменяет CSS-свойство background-color
+
+---
+
+#### **Задача №3: Показать/скрыть блок**
+**Условие:** Создайте две кнопки на странице. При нажатии на первую кнопку должны появиться подробности, а при нажатии на вторую кнопку должны скрыться подробности.
+
+**Решение:**
+```javascript
+// Находим блок с подробностями и кнопки
+let details = document.querySelector('.details');
+let showButton = document.querySelector('#show-button');
+let hideButton = document.querySelector('#hide-button');
+
+// При нажатии на "Показать" делаем блок видимым
+showButton.addEventListener('click', () => {
+    details.style.display = 'block';
+});
+
+// При нажатии на "Скрыть" прячем блок
+hideButton.addEventListener('click', () => {
+    details.style.display = 'none';
+});
+```
+
+**Как это работает:**
+- `display: block` — элемент отображается
+- `display: none` — элемент полностью скрыт и не занимает место на странице
+
+---
+
+#### **Задача №4: Подсветка поля при фокусе**
+**Условие:** Создайте поле ввода на странице. При фокусировке на поле ввода должен меняться его цвет на желтый.
+
+**Решение:**
+```javascript
+let input = document.querySelector('input');
+
+// При получении фокуса — желтый фон
+input.addEventListener('focus', () => {
+    input.style.backgroundColor = 'yellow';
+});
+
+// При потере фокуса — белый фон
+input.addEventListener('blur', () => {
+    input.style.backgroundColor = 'white';
+});
+```
+
+**Как это работает:**
+- `focus` — срабатывает, когда пользователь кликает на поле или переходит к нему клавишей Tab
+- `blur` — срабатывает, когда поле теряет фокус
+
+---
+
+#### **Задача №5: Двойной клик**
+**Условие:** Создайте кнопку на странице. При двойном клике на кнопку должен выводиться текст "Кнопка была дважды нажата".
+
+**Решение:**
+```javascript
+let button = document.querySelector('button');
+
+button.addEventListener('dblclick', () => {
+    console.log('Кнопка была дважды нажата');
+});
+```
+
+**Как это работает:**
+- `dblclick` — событие двойного клика (два быстрых нажатия)
+
 
 ---
 
 ### **Задания для самостоятельного выполнения**
 
-#### Задание №1: Генерация списка
-Создайте через JavaScript структуру элементов и добавьте её на страницу:
+#### **Задание №1: Счётчик кликов**
+Создайте кнопку и параграф (или `div`) для отображения счётчика. При каждом клике на кнопку число в счётчике должно увеличиваться на 1.
 
-1. Создайте заголовок `h1` с текстом "Список пользователей".
-2. Создайте маркированный список `ul` с 3 элементами `li`: "Анна", "Борис", "Виктор".
-3. Создайте кнопку "Добавить пользователя".
-4. Реализуйте функционал: при клике на кнопку в список добавляется новый элемент `li` с текстом "Новый пользователь".
-5. Используйте методы `createElement()`, `appendChild()`, `textContent`.
+#### **Задание №2: Приветствие**
+Создайте поле ввода и кнопку "Привет". При нажатии на кнопку выводите в консоль (или на страницу) текст: "Привет, [имя]!", где [имя] — это значение из поля ввода.
 
-#### Задание №2: Работа с селекторами
-Для приведённой HTML-структуры напишите код, который:
+#### **Задание №3: Переключатель темы**
+Создайте кнопку "Сменить тему". При клике на неё у всей страницы (тега `body`) должен меняться фон на тёмный, а текст — на светлый. При повторном клике — возвращаться обратно.
 
-1. Находит все элементы с классом `text`.
-2. Для элемента с классом `special` устанавливает красный цвет текста.
-3. Для каждого **третьего** параграфа (относительно общего списка) добавляет зелёный фон.
-4. Родительскому контейнеру добавляет рамку.
+Используйте `document.body.style.backgroundColor` и проверку текущего цвета.
 
-```html
-<div id="container">
-  <p class="text">Первый параграф</p>
-  <p class="text special">Второй параграф</p>
-  <p class="text">Третий параграф</p>
-  <p class="text">Четвёртый параграф</p>
-</div>
-```
+#### **Задание №4: Список дел**
+Создайте поле ввода и кнопку "Добавить". При нажатии на кнопку текст из поля ввода должен добавляться в виде нового элемента списка (`<li>`) в существующий список (`<ul>` или `<ol>`).
 
-#### Задание №3: Data-атрибуты и вычисления
-Для приведённой HTML-структуры напишите код, который:
+Используйте `createElement()` и `appendChild()`.
 
-1. Находит все элементы с классом `item`.
-2. Для **активного** элемента (с классом `active`) добавляет класс `highlight` (заранее создайте этот класс в CSS, например, `highlight { background-color: yellow; }`).
-3. Вычисляет **суммарную стоимость** всех товаров на основе `data-атрибутов`.
-4. Находит товар с **максимальной ценой** и выводит его название в консоль.
+#### **Задание №5: Управление размером**
+Создайте квадратный блок (div) и две кнопки: "+" и "-". При клике на "+" блок должен увеличиваться на 10px, при клике на "-" — уменьшаться на 10px.
 
-```html
-<div class="item" data-price="100">Товар 1</div>
-<div class="item active" data-price="200">Товар 2</div>
-<div class="item" data-price="150">Товар 3</div>
-```
+Меняйте `width` и `height` через `style`.
 
 ---
 
