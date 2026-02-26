@@ -4,30 +4,29 @@
 | ДИСЦИПЛИНА | Основы фронтенд-разработки |
 | ВИД УЧЕБНОГО МАТЕРИАЛА | Методические указания к практическим занятиям |
 
-## **Практическое занятие 13: Создание простого приложения на React**
+## **Практическое занятие 14 (Vue): Создание простого приложения на Vue 3**
 
 ---
 
 ### **Цель занятия**
-Научиться создавать React-приложение с нуля, освоить основные концепции: компоненты, пропсы, состояние, обработку событий и условный рендеринг. В результате будет создано работающее приложение - список задач с возможностью добавления, отметки выполнения и удаления. Также рассмотрим процесс публикации React-приложения на GitHub Pages.
+Научиться создавать Vue-приложение с нуля, освоить основные концепции: компоненты, пропсы, реактивное состояние, обработку событий и условный рендеринг. В результате будет создано работающее приложение - **персональный менеджер книг для чтения** с возможностью добавления, отметки прочитанных, оценки и удаления. Также рассмотрим процесс публикации Vue-приложения на GitHub Pages.
 
 ---
 
 ### **Теоретическая справка**
 
-#### **Как создается React-приложение**
+#### **Как создается Vue-приложение**
 
-Современный способ создания React-приложений - использование инструмента Vite. Vite - это современный инструмент сборки, который используется вместо устаревшего Create React App. Он создает готовую структуру проекта с минимальной конфигурацией и обеспечивает быструю работу в режиме разработки.
-
+Современный способ создания Vue-приложений - использование инструмента Vite, с которым мы ознакомились ранее.
 
 **Команда для создания проекта:**
 ```bash
-npm create vite@latest todo-app -- --template react
+npm create vite@latest book-manager -- --template vue
 ```
 
 После создания нужно перейти в папку проекта, установить зависимости и запустить сервер разработки:
 ```bash
-cd todo-app
+cd book-manager
 npm install
 npm run dev
 ```
@@ -35,240 +34,229 @@ npm run dev
 #### **Структура проекта**
 
 Созданный проект имеет следующую структуру ключевых файлов:
-- `src/main.jsx` - точка входа, здесь React монтируется в DOM
-- `src/App.jsx` - корневой компонент приложения
-- `src/App.css` - стили для корневого компонента
-- `index.html` - HTML-страница с контейнером `<div id="root">`
+- `src/main.js` - точка входа, здесь создается и монтируется Vue-приложение.
+- `src/App.vue` - корневой компонент приложения (однофайловый компонент).
+- `src/components/` - папка для дочерних компонентов.
+- `index.html` - HTML-страница с контейнером `<div id="app">`.
 
-#### **Основные понятия React**
+#### **Основные понятия Vue**
 
-**Компонент** - это функция, которая возвращает JSX-разметку. Каждый компонент отвечает за свою часть интерфейса и может быть переиспользован.
-Любое React-приложение строится из компонентов. 
+**Компонент** - строительный блок интерфейса. В Vue 3 компоненты обычно создаются в формате однофайловых компонентов (SFC - Single File Component), которые содержат шаблон (template), логику (script) и стили (style) в одном файле.
 
-Компоненты могут быть вложенными и переиспользованными. Их именование начинается с заглавной буквы. Компонент получает пропсы (входные данные) и может иметь состояние.
+```vue
+<template>
+  <h1>{{ message }}</h1>
+</template>
 
-```jsx
-function Greeting() {
-  return <h1>Привет, мир!</h1>;
+<script setup>
+const message = 'Привет, мир!'
+</script>
+```
+
+**Директивы** - специальные атрибуты с префиксом `v-`, которые добавляют динамическое поведение:
+- `v-bind` или `:` - связывание данных с атрибутами.
+- `v-on` или `@` - обработка событий.
+- `v-if`, `v-else-if`, `v-else` - условный рендеринг.
+- `v-for` - рендеринг списков.
+- `v-model` - двустороннее связывание для форм.
+
+**Реактивное состояние** создается с помощью функции `ref()` или `reactive()`.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const count = ref(0) // ref для примитивов
+
+const increment = () => {
+  count.value++ // обращение через .value
 }
+</script>
 ```
 
-**JSX** - синтаксис, позволяющий писать HTML-подобную разметку внутри JavaScript. В JSX можно встраивать JavaScript-выражения в фигурных скобках.
+**Вычисляемые свойства (computed)** используются для производных состояний, которые кэшируются и обновляются только при изменении зависимостей.
 
-```jsx
-const name = "Анна";
-return <p>Привет, {name}!</p>;
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const price = ref(100)
+const quantity = ref(2)
+const total = computed(() => price.value * quantity.value)
+</script>
 ```
 
-**Пропсы (props)** - входные данные, которые родительский компонент передает дочернему. Дочерний компонент не может изменять пропсы — они доступны только для чтения.
+**Пропсы (props)** - входные данные, которые родительский компонент передает дочернему.
 
-```jsx
-function Welcome({ name }) {
-  return <h1>Привет, {name}!</h1>;
+```vue
+<!-- Дочерний компонент -->
+<script setup>
+defineProps(['title', 'author'])
+</script>
+
+<template>
+  <h3>{{ title }}</h3>
+  <p>Автор: {{ author }}</p>
+</template>
+```
+
+**События (emits)** - механизм передачи сообщений от дочернего компонента к родительскому.
+
+```vue
+<!-- Дочерний компонент -->
+<script setup>
+const emit = defineEmits(['book-selected'])
+
+const selectBook = () => {
+  emit('book-selected', bookId)
 }
-
-// Использование:
-<Welcome name="Иван" />
-```
-
-**Состояние (state)** - данные, которые компонент хранит и может изменять. При изменении состояния компонент перерисовывается автоматически. Состояние создается с помощью хука useState.
-
-Пример добавления состояния в функциональный компонент с помощью хука useState.
-
-```jsx
-const [state, setState] = useState(initialValue);
-```
-
-При использовании UseState изменение состояния всегда происходит через функцию setState (работает асинхронно). Прямое изменение state не вызывает перерендер. Для зависимых обновлений используется функциональная форма: `setCount(prev => prev + 1)`
-
-```jsx
-import { useState } from 'react';
-
-function Counter() {
-  const [count, setCount] = useState(0);
-  
-  return (
-    <div>
-      <p>Счёт: {count}</p>
-      <button onClick={() => setCount(count + 1)}>
-        Увеличить
-      </button>
-    </div>
-  );
-}
-```
-
-**Обработка событий** в React похожа на обработку в обычном JavaScript, но с особенностями: имена событий пишутся в camelCase, а в обработчик передается функция.
-
-```jsx
-<button onClick={handleClick}>Нажми меня</button>
-<input onChange={(e) => console.log(e.target.value)} />
-<form onSubmit={handleSubmit}>...</form>
-```
-
-**Условный рендеринг** позволяет показывать разные части интерфейса в зависимости от состояния.
-
-```jsx
-// Вариант с && (показать если условие истинно)
-{isLoading && <p>Загрузка...</p>}
-
-// Вариант с тернарным оператором (выбор из двух)
-{isLoggedIn ? <LogoutButton /> : <LoginButton />}
-```
-
-**Рендеринг списков** выполняется с помощью метода map, при этом каждый элемент должен получать уникальный атрибут key.
-
-```jsx
-const items = ['яблоко', 'банан', 'апельсин'];
-return (
-  <ul>
-    {items.map((item, index) => (
-      <li key={index}>{item}</li>
-    ))}
-  </ul>
-);
+</script>
 ```
 
 ---
 
 ### **Разбор примеров**
 
-#### **Пример 1: Счётчик с ограничением**
+#### **Пример 1: Счётчик книг**
 
-Создадим компонент счётчика, который нельзя увеличить больше 10 и нельзя уменьшить меньше 0.
+Простейший компонент для подсчета количества книг.
 
-```jsx
-import { useState } from 'react';
+```vue
+<template>
+  <div class="counter">
+    <h2>Книг в коллекции: {{ count }}</h2>
+    <button @click="increment">+ Добавить книгу</button>
+    <button @click="decrement" :disabled="count === 0">- Убрать книгу</button>
+    <p v-if="count === 0" class="hint">Добавьте первую книгу!</p>
+    <p v-else-if="count >= 10" class="hint">Отличная коллекция!</p>
+  </div>
+</template>
 
-function LimitedCounter() {
-  const [count, setCount] = useState(0);
-  
-  const increment = () => {
-    if (count < 10) {
-      setCount(count + 1);
-    }
-  };
-  
-  const decrement = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
-  };
-  
-  return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2>Счётчик: {count}</h2>
-      <button onClick={decrement} disabled={count === 0}>-</button>
-      <button onClick={increment} disabled={count === 10}>+</button>
-      {count === 10 && <p style={{color: 'red'}}>Достигнут максимум!</p>}
-      {count === 0 && <p style={{color: 'gray'}}>Минимальное значение</p>}
-    </div>
-  );
+<script setup>
+import { ref } from 'vue'
+
+const count = ref(0)
+
+const increment = () => {
+  count.value++
 }
+
+const decrement = () => {
+  if (count.value > 0) {
+    count.value--
+  }
+}
+</script>
+
+<style scoped>
+.counter { text-align: center; }
+.hint { color: #666; font-style: italic; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
 ```
 
 **Как это работает:**
-- `useState(0)` создает состояние с начальным значением 0.
-- Проверки `if (count < 10)` и `if (count > 0)` предотвращают выход за границы.
-- Атрибут `disabled` блокирует кнопки, когда достигнуты пределы.
-- Условный рендеринг показывает подсказки при достижении границ.
+- `ref(0)` создает реактивное состояние.
+- `@click` обрабатывает клики по кнопкам.
+- `v-if`/`v-else` показывают подсказки.
+- `:disabled` динамически блокирует кнопку.
 
-#### **Пример 2: Приветствие с именем**
+#### **Пример 2: Поиск книги по названию**
 
-Компонент, который приветствует пользователя по имени, введенному в поле ввода.
+Компонент с двусторонним связыванием и вычисляемым свойством.
 
-```jsx
-import { useState } from 'react';
+```vue
+<template>
+  <div>
+    <h2>Поиск книги</h2>
+    <input 
+      v-model="searchQuery" 
+      type="text" 
+      placeholder="Введите название..."
+    />
+    <p v-if="searchQuery">
+      {{ searchResult }}
+    </p>
+  </div>
+</template>
 
-function NameGreeting() {
-  const [name, setName] = useState('');
-  const [greeting, setGreeting] = useState('');
+<script setup>
+import { ref, computed } from 'vue'
+
+const searchQuery = ref('')
+const books = ref(['Война и мир', 'Преступление и наказание', 'Анна Каренина'])
+
+const searchResult = computed(() => {
+  if (!searchQuery.value) return ''
   
-  const handleInputChange = (e) => {
-    setName(e.target.value);
-  };
+  const found = books.value.find(book => 
+    book.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
   
-  const sayHello = () => {
-    if (name.trim()) {
-      setGreeting(`Привет, ${name}!`);
-    } else {
-      setGreeting('Пожалуйста, введите имя');
-    }
-  };
-  
-  return (
-    <div style={{ padding: '20px' }}>
-      <h2>Приветствие</h2>
-      <input
-        type="text"
-        value={name}
-        onChange={handleInputChange}
-        placeholder="Введите ваше имя"
-      />
-      <button onClick={sayHello}>Поздороваться</button>
-      {greeting && <p>{greeting}</p>}
-    </div>
-  );
-}
+  return found 
+    ? `Найдена книга: ${found}` 
+    : 'Книга не найдена'
+})
+</script>
 ```
 
 **Как это работает:**
-- Состояние `name` синхронизируется со значением поля ввода.
-- Состояние `greeting` хранит текст приветствия.
-- Проверка `if (name.trim())` отсекает пустые строки.
-- `{greeting && <p>{greeting}</p>}` показывает сообщение только когда оно есть.
+- `v-model` связывает поле ввода с состоянием `searchQuery`.
+- `computed` автоматически обновляет результат поиска.
+- При изменении поискового запроса результат пересчитывается.
 
-#### **Пример 3: Переключатель темы**
+#### **Пример 3: Рейтинг книги**
 
-Компонент, который переключает светлую и темную тему приложения.
+Компонент для оценки книг звездочками.
 
-```jsx
-import { useState } from 'react';
+```vue
+<template>
+  <div class="rating">
+    <span v-for="star in 5" :key="star" class="star" @click="setRating(star)">
+      {{ star <= modelValue ? '★' : '☆' }}
+    </span>
+    <span v-if="modelValue" class="rating-text">({{ modelValue }}/5)</span>
+  </div>
+</template>
 
-function ThemeSwitcher() {
-  const [isDark, setIsDark] = useState(false);
-  
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-  };
-  
-  const themeStyles = {
-    backgroundColor: isDark ? '#333' : '#fff',
-    color: isDark ? '#fff' : '#333',
-    minHeight: '200px',
-    padding: '20px',
-    transition: 'all 0.3s'
-  };
-  
-  return (
-    <div style={themeStyles}>
-      <h2>{isDark ? 'Тёмная тема' : 'Светлая тема'}</h2>
-      <button onClick={toggleTheme}>
-        Переключить на {isDark ? 'светлую' : 'тёмную'}
-      </button>
-    </div>
-  );
+<script setup>
+defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
+
+const setRating = (value) => {
+  emit('update:modelValue', value)
 }
+</script>
+
+<style scoped>
+.star { 
+  font-size: 24px; 
+  cursor: pointer; 
+  color: gold;
+}
+.star:hover { transform: scale(1.2); }
+</style>
 ```
 
 **Как это работает:**
-- Состояние `isDark` хранит текущую тему.
-- Объект `themeStyles` динамически формируется на основе состояния.
-- Тернарные операторы подбирают нужные цвета и текст.
+- Компонент реализует двустороннее связывание через `v-model`.
+- `v-for` создает 5 звезд.
+- Клик по звезде устанавливает рейтинг.
 
 ---
 
+### **Постановка задачи: Менеджер книг для чтения**
 
-### **Постановка задачи: Менеджер задач**
+Нам предстоит реализовать приложение для управления списком книг со следующим функционалом:
 
-Нам предстоит реализовать приложение для управления задачами со следующим функционалом:
-
-- Добавление новых задач через форму ввода.
-- Отметка задач как выполненных.
-- Удаление задач.
-- Фильтрация задач: все, активные, выполненные.
-- Счетчик оставшихся задач.
-- Сохранение задач в localStorage (чтобы после обновления страницы они не пропадали).
+- Добавление новых книг (название, автор, жанр).
+- Отметка книг как прочитанных.
+- Оценка прочитанных книг (от 1 до 5 звезд).
+- Удаление книг.
+- Фильтрация: все, непрочитанные, прочитанные.
+- Поиск по названию или автору.
+- Статистика: сколько книг прочитано, общее количество.
+- Сохранение книг в localStorage.
 
 ---
 
@@ -278,12 +266,12 @@ function ThemeSwitcher() {
 
 1. Откройте терминал и выполните команду:
 ```bash
-npm create vite@latest todo-manager -- --template react
+npm create vite@latest book-manager -- --template vue
 ```
 
 2. Перейдите в папку проекта:
 ```bash
-cd todo-manager
+cd book-manager
 ```
 
 3. Установите зависимости:
@@ -291,335 +279,614 @@ cd todo-manager
 npm install
 ```
 
-**Шаги выше мы уже выполнили в начале практики, поэтому, перейдем далее**
+4. Очистите проект. В `src/App.vue` оставьте базовую структуру:
+```vue
+<template>
+  <div>
+    <h1>Менеджер книг</h1>
+  </div>
+</template>
 
-4. Удалите лишние файлы. В папке `src` оставьте только `main.jsx`, удалите `App.css` и `index.css` (стили будем писать в компонентах).
+<script setup>
+</script>
 
-5. Очистите `App.jsx` до базовой структуры:
-```jsx
-function App() {
-  return (
-    <div>
-      <h1>Менеджер задач</h1>
-    </div>
-  );
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-export default App;
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+</style>
 ```
 
-6. Запустите сервер разработки:
+5. Запустите сервер разработки:
 ```bash
 npm run dev
 ```
 
-#### **Шаг 2: Создание компонента задачи (TodoItem)**
+#### **Шаг 2: Создание компонента книги (BookCard.vue)**
 
-Создайте в папке `src` папку `components`, а в ней файл `TodoItem.jsx`:
+Создайте в папке `src/components` файл `BookCard.vue`:
 
-```jsx
-function TodoItem({ task, onToggle, onDelete }) {
-  return (
-    <li style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px',
-      padding: '8px',
-      borderBottom: '1px solid #eee'
-    }}>
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={() => onToggle(task.id)}
-      />
-      <span style={{
-        flex: 1,
-        textDecoration: task.completed ? 'line-through' : 'none',
-        color: task.completed ? '#999' : '#333'
-      }}>
-        {task.text}
-      </span>
-      <button 
-        onClick={() => onDelete(task.id)}
-        style={{
-          background: '#ff4444',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          padding: '4px 8px',
-          cursor: 'pointer'
-        }}
-      >
-        Удалить
-      </button>
-    </li>
-  );
-}
-
-export default TodoItem;
-```
-
-**Что здесь происходит:**
-- Компонент принимает три пропса: `task` (объект задачи), `onToggle` (функция для отметки выполнения), `onDelete` (функция для удаления).
-- Чекбокс привязан к состоянию `task.completed`.
-- Текст задачи зачеркивается, если задача выполнена.
-- Кнопка удаления вызывает `onDelete` с идентификатором задачи.
-
-#### **Шаг 3: Создание формы добавления (AddTodoForm)**
-
-Создайте файл `AddTodoForm.jsx` в папке `components`:
-
-```jsx
-import { useState } from 'react';
-
-function AddTodoForm({ onAdd }) {
-  const [text, setText] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (text.trim()) {
-      onAdd(text.trim());
-      setText('');
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-      <input
-        type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Добавить новую задачу..."
-        style={{
-          padding: '8px',
-          width: '300px',
-          marginRight: '10px',
-          borderRadius: '4px',
-          border: '1px solid #ddd'
-        }}
-      />
-      <button 
-        type="submit"
-        style={{
-          padding: '8px 16px',
-          background: '#4CAF50',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer'
-        }}
-      >
-        Добавить
-      </button>
-    </form>
-  );
-}
-
-export default AddTodoForm;
-```
-
-**Что здесь происходит:**
-- Локальное состояние `text` управляет значением поля ввода.
-- При отправке формы вызывается `preventDefault` для предотвращения перезагрузки.
-- Если текст не пустой, вызывается переданная функция `onAdd`, а поле очищается.
-
-#### **Шаг 4: Создание фильтров (TodoFilters)**
-
-Создайте файл `TodoFilters.jsx`:
-
-```jsx
-function TodoFilters({ filter, onFilterChange, activeCount }) {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: '20px',
-      paddingBottom: '10px',
-      borderBottom: '2px solid #eee'
-    }}>
-      <span>Осталось задач: {activeCount}</span>
-      <div>
-        {['all', 'active', 'completed'].map((filterType) => (
-          <button
-            key={filterType}
-            onClick={() => onFilterChange(filterType)}
-            style={{
-              margin: '0 5px',
-              padding: '5px 10px',
-              background: filter === filterType ? '#007bff' : '#f0f0f0',
-              color: filter === filterType ? 'white' : '#333',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            {filterType === 'all' ? 'Все' : 
-             filterType === 'active' ? 'Активные' : 'Выполненные'}
-          </button>
-        ))}
-      </div>
+```vue
+<template>
+  <div class="book-card" :class="{ completed: book.completed }">
+    <div class="book-info">
+      <h3>{{ book.title }}</h3>
+      <p class="author">{{ book.author }}</p>
+      <span class="genre">{{ book.genre }}</span>
     </div>
-  );
-}
-
-export default TodoFilters;
-```
-
-**Что здесь происходит:**
-- Компонент принимает текущий фильтр и функцию его изменения.
-- Кнопка активного фильтра выделяется синим цветом.
-- Счетчик показывает количество невыполненных задач.
-
-#### **Шаг 5: Сборка главного компонента (App.jsx)**
-
-Теперь соберем всё вместе в `App.jsx`:
-
-```jsx
-import { useState, useEffect } from 'react';
-import AddTodoForm from './components/AddTodoForm';
-import TodoFilters from './components/TodoFilters';
-import TodoItem from './components/TodoItem';
-
-function App() {
-  // Состояние для списка задач
-  const [todos, setTodos] = useState(() => {
-    // Загружаем сохраненные задачи из localStorage
-    const saved = localStorage.getItem('todos');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  // Состояние для текущего фильтра
-  const [filter, setFilter] = useState('all');
-
-  // Сохраняем задачи в localStorage при каждом изменении
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
-  // Добавление новой задачи
-  const addTodo = (text) => {
-    const newTodo = {
-      id: Date.now(),
-      text: text,
-      completed: false
-    };
-    setTodos([...todos, newTodo]);
-  };
-
-  // Переключение статуса задачи
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  // Удаление задачи
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  // Фильтрация задач
-  const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true; // 'all'
-  });
-
-  // Подсчет активных задач
-  const activeCount = todos.filter(todo => !todo.completed).length;
-
-  return (
-    <div style={{
-      maxWidth: '600px',
-      margin: '0 auto',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif'
-    }}>
-      <h1 style={{ textAlign: 'center', color: '#333' }}>Менеджер задач</h1>
-      
-      <AddTodoForm onAdd={addTodo} />
-      
-      <TodoFilters 
-        filter={filter}
-        onFilterChange={setFilter}
-        activeCount={activeCount}
-      />
-      
-      {filteredTodos.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#999' }}>
-          {filter === 'all' ? 'Задач пока нет' : 
-           filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
-        </p>
-      ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {filteredTodos.map(todo => (
-            <TodoItem
-              key={todo.id}
-              task={todo}
-              onToggle={toggleTodo}
-              onDelete={deleteTodo}
-            />
-          ))}
-        </ul>
-      )}
-      
-      {todos.length > 0 && (
-        <button 
-          onClick={() => setTodos([])}
-          style={{
-            marginTop: '20px',
-            padding: '8px 16px',
-            background: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            width: '100%'
-          }}
+    
+    <div class="book-actions">
+      <div v-if="book.completed" class="rating">
+        <span 
+          v-for="star in 5" 
+          :key="star"
+          @click="$emit('rate', star)"
         >
-          Очистить всё
-        </button>
-      )}
+          {{ star <= book.rating ? '★' : '☆' }}
+        </span>
+      </div>
+      
+      <button 
+        @click="$emit('toggle')"
+        :class="['btn', book.completed ? 'btn-secondary' : 'btn-primary']"
+      >
+        {{ book.completed ? 'Прочитано' : 'Отметить прочитанной' }}
+      </button>
+      
+      <button @click="$emit('delete')" class="btn btn-danger">
+        ✕
+      </button>
     </div>
-  );
+  </div>
+</template>
+
+<script setup>
+defineProps(['book'])
+defineEmits(['toggle', 'delete', 'rate'])
+</script>
+
+<style scoped>
+.book-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
 }
 
-export default App;
+.book-card.completed {
+  background: #f0f7f0;
+  opacity: 0.8;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-info h3 {
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.author {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 4px;
+}
+
+.genre {
+  background: #e0e0e0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
+
+.book-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.rating {
+  display: flex;
+  gap: 2px;
+}
+
+.rating span {
+  font-size: 20px;
+  cursor: pointer;
+  color: gold;
+}
+
+.rating span:hover {
+  transform: scale(1.2);
+}
+
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+}
+
+.btn-secondary {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #1e87db;
+}
+
+.btn-danger {
+  background: #f44336;
+  color: white;
+  padding: 8px 12px;
+}
+
+.btn-danger:hover {
+  background: #da190b;
+}
+</style>
 ```
 
-**Ключевые моменты в App.jsx:**
-- `useState` с функцией инициализации для загрузки из localStorage.
-- `useEffect` для сохранения задач при каждом изменении.
-- Функции `addTodo`, `toggleTodo`, `deleteTodo` для управления задачами.
-- Фильтрация задач в зависимости от выбранного фильтра.
-- Условный рендеринг для пустого состояния.
-- Передача пропсов дочерним компонентам.
+**Что здесь происходит:**
+- Компонент отображает карточку книги с названием, автором и жанром.
+- Для прочитанных книг показывается рейтинг звездочками.
+- Кнопки позволяют отметить прочитанной, поставить оценку или удалить.
+- Стили меняются в зависимости от статуса книги.
 
-#### **Шаг 6: Точка входа (main.jsx)**
+#### **Шаг 3: Создание формы добавления (AddBookForm.vue)**
 
-Убедитесь, что `main.jsx` выглядит так:
+Создайте файл `AddBookForm.vue`:
 
-```jsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+```vue
+<template>
+  <form @submit.prevent="handleSubmit" class="add-form">
+    <h2>Добавить новую книгу</h2>
+    
+    <div class="form-group">
+      <input 
+        v-model="formData.title"
+        type="text"
+        placeholder="Название книги"
+        required
+      />
+    </div>
+    
+    <div class="form-group">
+      <input 
+        v-model="formData.author"
+        type="text"
+        placeholder="Автор"
+        required
+      />
+    </div>
+    
+    <div class="form-group">
+      <select v-model="formData.genre" required>
+        <option value="">Выберите жанр</option>
+        <option value="Роман">Роман</option>
+        <option value="Фантастика">Фантастика</option>
+        <option value="Детектив">Детектив</option>
+        <option value="Научная">Научная</option>
+        <option value="Поэзия">Поэзия</option>
+      </select>
+    </div>
+    
+    <button type="submit" class="btn-submit">Добавить книгу</button>
+  </form>
+</template>
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+<script setup>
+import { reactive } from 'vue'
+
+const emit = defineEmits(['add-book'])
+
+const formData = reactive({
+  title: '',
+  author: '',
+  genre: ''
+})
+
+const handleSubmit = () => {
+  emit('add-book', { ...formData })
+  // Очистка формы
+  formData.title = ''
+  formData.author = ''
+  formData.genre = ''
+}
+</script>
+
+<style scoped>
+.add-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.add-form h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-submit:hover {
+  background: #45a049;
+}
+</style>
+```
+
+**Что здесь происходит:**
+- `reactive` создает реактивный объект для формы.
+- `v-model` связывает поля формы с данными.
+- `@submit.prevent` отменяет стандартную отправку формы.
+- После добавления книги форма очищается.
+
+#### **Шаг 4: Создание фильтров и поиска (BookFilters.vue)**
+
+Создайте файл `BookFilters.vue`:
+
+```vue
+<template>
+  <div class="filters">
+    <div class="search">
+      <input 
+        v-model="searchQuery"
+        type="text"
+        placeholder="Поиск по названию или автору..."
+      />
+    </div>
+    
+    <div class="filter-buttons">
+      <button 
+        v-for="option in filterOptions" 
+        :key="option.value"
+        @click="$emit('update:filter', option.value)"
+        :class="['filter-btn', { active: filter === option.value }]"
+      >
+        {{ option.label }}
+      </button>
+    </div>
+    
+    <div class="stats">
+      <p>Всего: {{ total }} | Прочитано: {{ completed }} | Осталось: {{ total - completed }}</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['filter', 'books'])
+defineEmits(['update:filter'])
+
+const searchQuery = defineModel('searchQuery')
+
+const filterOptions = [
+  { value: 'all', label: 'Все' },
+  { value: 'unread', label: 'Непрочитанные' },
+  { value: 'read', label: 'Прочитанные' }
+]
+
+const total = computed(() => props.books.length)
+const completed = computed(() => props.books.filter(b => b.completed).length)
+</script>
+
+<style scoped>
+.filters {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.search {
+  margin-bottom: 15px;
+}
+
+.search input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.filter-btn:hover {
+  background: #f0f0f0;
+}
+
+.filter-btn.active {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.stats {
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+```
+
+**Что здесь происходит:**
+- `defineModel` создает двустороннюю привязку для поискового запроса (новая фича Vue 3.4+).
+- Фильтры подсвечиваются при выборе.
+- Статистика обновляется автоматически через вычисляемые свойства.
+
+#### **Шаг 5: Сборка главного компонента (App.vue)**
+
+Теперь соберем всё вместе:
+
+```vue
+<template>
+  <div class="app">
+    <header>
+      <h1>Менеджер книг</h1>
+      <p>Управляй своей библиотекой</p>
+    </header>
+
+    <main>
+      <AddBookForm @add-book="addBook" />
+      
+      <BookFilters 
+        v-model:searchQuery="searchQuery"
+        v-model:filter="currentFilter"
+        :books="books"
+      />
+      
+      <div v-if="filteredBooks.length === 0" class="empty-state">
+        <p>Книги не найдены :(</p>
+        <p>Добавьте первую книгу или измените параметры поиска</p>
+      </div>
+      
+      <div v-else class="books-list">
+        <BookCard
+          v-for="book in filteredBooks"
+          :key="book.id"
+          :book="book"
+          @toggle="toggleBook(book.id)"
+          @delete="deleteBook(book.id)"
+          @rate="rateBook(book.id, $event)"
+        />
+      </div>
+    </main>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+import AddBookForm from './components/AddBookForm.vue'
+import BookFilters from './components/BookFilters.vue'
+import BookCard from './components/BookCard.vue'
+
+// Состояние книг с загрузкой из localStorage
+const books = ref([])
+
+// Загрузка сохраненных книг
+const savedBooks = localStorage.getItem('books')
+if (savedBooks) {
+  books.value = JSON.parse(savedBooks)
+}
+
+// Состояния фильтрации
+const currentFilter = ref('all')
+const searchQuery = ref('')
+
+// Сохранение изменений
+watch(books, (newBooks) => {
+  localStorage.setItem('books', JSON.stringify(newBooks))
+}, { deep: true })
+
+// Добавление книги
+const addBook = (bookData) => {
+  const newBook = {
+    id: Date.now(),
+    ...bookData,
+    completed: false,
+    rating: 0
+  }
+  books.value.push(newBook)
+}
+
+// Переключение статуса
+const toggleBook = (id) => {
+  const book = books.value.find(b => b.id === id)
+  if (book) {
+    book.completed = !book.completed
+    if (!book.completed) {
+      book.rating = 0
+    }
+  }
+}
+
+// Оценка книги
+const rateBook = (id, rating) => {
+  const book = books.value.find(b => b.id === id)
+  if (book && book.completed) {
+    book.rating = rating
+  }
+}
+
+// Удаление книги
+const deleteBook = (id) => {
+  if (confirm('Удалить книгу?')) {
+    books.value = books.value.filter(b => b.id !== id)
+  }
+}
+
+// Фильтрация и поиск книг
+const filteredBooks = computed(() => {
+  return books.value
+    .filter(book => {
+      if (currentFilter.value === 'unread') return !book.completed
+      if (currentFilter.value === 'read') return book.completed
+      return true
+    })
+    .filter(book => {
+      if (!searchQuery.value) return true
+      const query = searchQuery.value.toLowerCase()
+      return book.title.toLowerCase().includes(query) ||
+             book.author.toLowerCase().includes(query)
+    })
+})
+</script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f2f5;
+  line-height: 1.6;
+}
+
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin-bottom: 5px;
+}
+
+main {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 1.2em;
+}
+
+.empty-state p:first-child {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.books-list {
+  margin-top: 20px;
+}
+</style>
+```
+
+**Ключевые моменты в App.vue:**
+- `ref` для реактивных данных.
+- `watch` для сохранения в localStorage при каждом изменении.
+- `computed` для фильтрации и поиска книг.
+- Использование всех созданных компонентов.
+- Двустороннее связывание с помощью `v-model` и `v-model:searchQuery`.
+
+#### **Шаг 6: Точка входа (main.js)**
+
+Убедитесь, что `main.js` выглядит так:
+
+```js
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')
 ```
 
 ---
 
 ### **Дополнительные задания для самостоятельной работы**
 
-После создания базового приложения можете добавьте следующие улучшения:
-
-1. **Редактирование задачи** — при двойном клике на текст задачи должно появляться поле для редактирования.
-2. **Смена темы** — реализуйте переключение между светлой и темной темой.
+В качестве самостоятельной работы добавьте возможность отмечать книги как Избранные или Любимые.
 
 ---
 
@@ -628,7 +895,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 #### **Шаг 1: Подготовка репозитория**
 
 1. Создайте новый репозиторий на GitHub.
-2. Инициализируйте git в локальном проекте и свяжите с репозиторием.
+2. Инициализируйте git в локальном проекте.
 
 #### **Шаг 2: Настройка Vite для GitHub Pages**
 
@@ -639,7 +906,7 @@ npm install --save-dev gh-pages
 
 В файле `package.json` добавьте:
 ```json
-"homepage": "https://ваш-логин.github.io/todo-app" // тут полный путь до Git Pages
+"homepage": "https://ваш-логин.github.io/book-manager" // тут полная ссылка на Git Pages
 ```
 
 В раздел `scripts` добавьте:
@@ -654,11 +921,11 @@ npm install --save-dev gh-pages
 
 ```javascript
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  plugins: [react()],
-  base: '/todo-app/' // тут название репозитория
+  plugins: [vue()],
+  base: '/book-manager/' // тут название репозитория
 })
 ```
 
@@ -672,8 +939,8 @@ npm run deploy
 #### **Шаг 5: Настройка GitHub Pages**
 
 1. Перейдите в настройки репозитория на GitHub (вкладка Settings).
-2. В разделе Pages выберите ветку `gh-pages` и папку `/root` <- **ВАЖНО!**.
-3. Сохраните — через несколько минут приложение будет доступно по адресу: `https://ваш-логин.github.io/todo-app`.
+2. В разделе Pages выберите ветку `gh-pages` и папку `/root`.
+3. Сохраните — через несколько минут приложение будет доступно.
 
 #### **Что делать при обновлении приложения**
 
@@ -686,8 +953,10 @@ npm run deploy
 
 ---
 
+
 ### **Формат отчёта**
 
-В область для загрузки (Практическое задание 13) прикреплена ссылка на GitHub Pages. Страница React-приложения проверена и работоспособна.
+В область для загрузки (Практическое задание 14) прикрепите ссылку на GitHub Pages с работающим Vue-приложением. Страница должна быть проверена и работоспособна.
+
 
 
