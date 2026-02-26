@@ -1,240 +1,711 @@
-|||
+| | |
 |---|---|
-|ДПО|Фронтенд и бэкенд разработка|
-|ДИСЦИПЛИНА|Основы фронтенд-разработки|
-|ВИД УЧЕБНОГО МАТЕРИАЛА|Методические указания к практическим занятиям|
+| ДПО | Фронтенд и бэкенд разработка |
+| ДИСЦИПЛИНА | Основы фронтенд-разработки |
+| ВИД УЧЕБНОГО МАТЕРИАЛА | Методические указания к практическим занятиям |
 
-## **Практическое занятие 12: Обработка событий в JavaScript**
+## **Практическое занятие 13: Создание простого приложения на React**
 
 ---
 
-### **Цель:**
-Научиться обрабатывать различные события на веб-странице: клики мыши, наведение курсора, нажатия клавиш, фокус на полях ввода. Закрепить навыки добавления обработчиков событий и изменения элементов страницы в ответ на действия пользователя.
+### **Цель занятия**
+Научиться создавать React-приложение с нуля, освоить основные концепции: компоненты, пропсы, состояние, обработку событий и условный рендеринг. В результате будет создано работающее приложение - список задач с возможностью добавления, отметки выполнения и удаления.
 
 ---
 
 ### **Теоретическая справка**
 
-#### **Что такое события?**
-События — это сигналы, которые браузер отправляет JavaScript-коду о том, что пользователь что-то сделал: кликнул на кнопку, нажал клавишу, отправил форму и т.д.
+#### **Как создается React-приложение**
 
-#### **Как добавить обработчик события**
+Современный способ создания React-приложений - использование инструмента Vite. Vite - это современный инструмент сборки, который используется вместо устаревшего Create React App. Он создает готовую структуру проекта с минимальной конфигурацией и обеспечивает быструю работу в режиме разработки.
 
-**Способ 1: addEventListener (рекомендуемый)**
-```javascript
-const button = document.querySelector('button');
-button.addEventListener('click', function() {
-    // код, который выполнится при клике
-    console.log('Кнопка нажата!');
-});
+
+**Команда для создания проекта:**
+```bash
+npm create vite@latest todo-app -- --template react
 ```
 
-**Способ 2: через атрибут (только для простых случаев)**
-```javascript
-button.onclick = function() {
-    console.log('Кнопка нажата!');
-};
+После создания нужно перейти в папку проекта, установить зависимости и запустить сервер разработки:
+```bash
+cd todo-app
+npm install
+npm run dev
 ```
 
-#### **Основные события**
+#### **Структура проекта**
 
-| Событие | Когда срабатывает |
-|---------|-------------------|
-| `click` | Клик левой кнопкой мыши |
-| `dblclick` | Двойной клик |
-| `mouseover` | Курсор наводится на элемент |
-| `mouseout` | Курсор уходит с элемента |
-| `keydown` | Клавиша нажата |
-| `keyup` | Клавиша отпущена |
-| `focus` | Поле ввода получает фокус |
-| `blur` | Поле ввода теряет фокус |
-| `submit` | Отправка формы |
+Созданный проект имеет следующую структуру ключевых файлов:
+- `src/main.jsx` - точка входа, здесь React монтируется в DOM
+- `src/App.jsx` - корневой компонент приложения
+- `src/App.css` - стили для корневого компонента
+- `index.html` - HTML-страница с контейнером `<div id="root">`
 
-С остальными событиями и документацией можно ознакомиться в Лекции 9.
+#### **Основные понятия React**
 
-#### **Объект события (event)**
+**Компонент** - это функция, которая возвращает JSX-разметку. Каждый компонент отвечает за свою часть интерфейса и может быть переиспользован.
+Любое React-приложение строится из компонентов. 
 
-В обработчик автоматически передаётся объект с информацией о событии:
+Компоненты могут быть вложенными и переиспользованными. Их именование начинается с заглавной буквы. Компонент получает пропсы (входные данные) и может иметь состояние.
 
-```javascript
-button.addEventListener('click', function(event) {
-    console.log(event.type);        // тип события: "click"
-    console.log(event.target);       // элемент, на который кликнули
-    console.log(event.currentTarget); // элемент, на котором висит обработчик
-});
+```jsx
+function Greeting() {
+  return <h1>Привет, мир!</h1>;
+}
 ```
 
-Для событий клавиатуры:
-```javascript
-input.addEventListener('keydown', function(event) {
-    console.log(event.key);      // символ клавиши: "a", "Enter", "ArrowUp"
-    console.log(event.code);      // код клавиши: "KeyA", "Enter", "ArrowUp"
-    console.log(event.ctrlKey);   // зажат ли Ctrl? true/false
-});
+**JSX** - синтаксис, позволяющий писать HTML-подобную разметку внутри JavaScript. В JSX можно встраивать JavaScript-выражения в фигурных скобках.
+
+```jsx
+const name = "Анна";
+return <p>Привет, {name}!</p>;
 ```
 
-#### **Изменение стилей через JavaScript**
+**Пропсы (props)** - входные данные, которые родительский компонент передает дочернему. Дочерний компонент не может изменять пропсы — они доступны только для чтения.
 
-```javascript
-element.style.backgroundColor = 'red';
-element.style.color = 'white';
-element.style.display = 'none';    // скрыть элемент
-element.style.display = 'block';   // показать элемент
+```jsx
+function Welcome({ name }) {
+  return <h1>Привет, {name}!</h1>;
+}
+
+// Использование:
+<Welcome name="Иван" />
+```
+
+**Состояние (state)** - данные, которые компонент хранит и может изменять. При изменении состояния компонент перерисовывается автоматически. Состояние создается с помощью хука useState.
+
+Пример добавления состояния в функциональный компонент с помощью хука useState.
+
+```jsx
+const [state, setState] = useState(initialValue);
+```
+
+При использовании UseState изменение состояния всегда происходит через функцию setState (работает асинхронно). Прямое изменение state не вызывает перерендер. Для зависимых обновлений используется функциональная форма: `setCount(prev => prev + 1)`
+
+```jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <p>Счёт: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Увеличить
+      </button>
+    </div>
+  );
+}
+```
+
+**Обработка событий** в React похожа на обработку в обычном JavaScript, но с особенностями: имена событий пишутся в camelCase, а в обработчик передается функция.
+
+```jsx
+<button onClick={handleClick}>Нажми меня</button>
+<input onChange={(e) => console.log(e.target.value)} />
+<form onSubmit={handleSubmit}>...</form>
+```
+
+**Условный рендеринг** позволяет показывать разные части интерфейса в зависимости от состояния.
+
+```jsx
+// Вариант с && (показать если условие истинно)
+{isLoading && <p>Загрузка...</p>}
+
+// Вариант с тернарным оператором (выбор из двух)
+{isLoggedIn ? <LogoutButton /> : <LoginButton />}
+```
+
+**Рендеринг списков** выполняется с помощью метода map, при этом каждый элемент должен получать уникальный атрибут key.
+
+```jsx
+const items = ['яблоко', 'банан', 'апельсин'];
+return (
+  <ul>
+    {items.map((item, index) => (
+      <li key={index}>{item}</li>
+    ))}
+  </ul>
+);
 ```
 
 ---
 
 ### **Разбор примеров**
 
+#### **Пример 1: Счётчик с ограничением**
 
-#### **Задача №1: Две разные кнопки**
-**Условие:** Создайте две кнопки на странице. При нажатии на первую кнопку должен выводиться текст "Нажата первая кнопка", а при нажатии на вторую кнопку должен выводиться текст "Нажата вторая кнопка".
+Создадим компонент счётчика, который нельзя увеличить больше 10 и нельзя уменьшить меньше 0.
 
-**Решение:**
-```javascript
-// Находим кнопки по их ID
-let firstButton = document.querySelector('#first-button');
-let secondButton = document.querySelector('#second-button');
+```jsx
+import { useState } from 'react';
 
-// Добавляем обработчики для каждой кнопки
-firstButton.addEventListener('click', () => {
-    console.log('Нажата первая кнопка');
-});
-
-secondButton.addEventListener('click', () => {
-    console.log('Нажата вторая кнопка');
-});
+function LimitedCounter() {
+  const [count, setCount] = useState(0);
+  
+  const increment = () => {
+    if (count < 10) {
+      setCount(count + 1);
+    }
+  };
+  
+  const decrement = () => {
+    if (count > 0) {
+      setCount(count - 1);
+    }
+  };
+  
+  return (
+    <div style={{ textAlign: 'center', padding: '20px' }}>
+      <h2>Счётчик: {count}</h2>
+      <button onClick={decrement} disabled={count === 0}>-</button>
+      <button onClick={increment} disabled={count === 10}>+</button>
+      {count === 10 && <p style={{color: 'red'}}>Достигнут максимум!</p>}
+      {count === 0 && <p style={{color: 'gray'}}>Минимальное значение</p>}
+    </div>
+  );
+}
 ```
 
 **Как это работает:**
-- `#first-button` — селектор по ID (в HTML должно быть `id="first-button"`)
-- Каждая кнопка получает свой собственный обработчик
+- `useState(0)` создает состояние с начальным значением 0.
+- Проверки `if (count < 10)` и `if (count > 0)` предотвращают выход за границы.
+- Атрибут `disabled` блокирует кнопки, когда достигнуты пределы.
+- Условный рендеринг показывает подсказки при достижении границ.
 
-**HTML, который нужен:**
-```html
-<button id="first-button">Кнопка 1</button>
-<button id="second-button">Кнопка 2</button>
+#### **Пример 2: Приветствие с именем**
+
+Компонент, который приветствует пользователя по имени, введенному в поле ввода.
+
+```jsx
+import { useState } from 'react';
+
+function NameGreeting() {
+  const [name, setName] = useState('');
+  const [greeting, setGreeting] = useState('');
+  
+  const handleInputChange = (e) => {
+    setName(e.target.value);
+  };
+  
+  const sayHello = () => {
+    if (name.trim()) {
+      setGreeting(`Привет, ${name}!`);
+    } else {
+      setGreeting('Пожалуйста, введите имя');
+    }
+  };
+  
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2>Приветствие</h2>
+      <input
+        type="text"
+        value={name}
+        onChange={handleInputChange}
+        placeholder="Введите ваше имя"
+      />
+      <button onClick={sayHello}>Поздороваться</button>
+      {greeting && <p>{greeting}</p>}
+    </div>
+  );
+}
+```
+
+**Как это работает:**
+- Состояние `name` синхронизируется со значением поля ввода.
+- Состояние `greeting` хранит текст приветствия.
+- Проверка `if (name.trim())` отсекает пустые строки.
+- `{greeting && <p>{greeting}</p>}` показывает сообщение только когда оно есть.
+
+#### **Пример 3: Переключатель темы**
+
+Компонент, который переключает светлую и темную тему приложения.
+
+```jsx
+import { useState } from 'react';
+
+function ThemeSwitcher() {
+  const [isDark, setIsDark] = useState(false);
+  
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+  };
+  
+  const themeStyles = {
+    backgroundColor: isDark ? '#333' : '#fff',
+    color: isDark ? '#fff' : '#333',
+    minHeight: '200px',
+    padding: '20px',
+    transition: 'all 0.3s'
+  };
+  
+  return (
+    <div style={themeStyles}>
+      <h2>{isDark ? 'Тёмная тема' : 'Светлая тема'}</h2>
+      <button onClick={toggleTheme}>
+        Переключить на {isDark ? 'светлую' : 'тёмную'}
+      </button>
+    </div>
+  );
+}
+```
+
+**Как это работает:**
+- Состояние `isDark` хранит текущую тему.
+- Объект `themeStyles` динамически формируется на основе состояния.
+- Тернарные операторы подбирают нужные цвета и текст.
+
+---
+
+
+### **Постановка задачи: Менеджер задач**
+
+Нам предстоит создать приложение для управления задачами со следующим функционалом:
+
+- Добавление новых задач через форму ввода.
+- Отметка задач как выполненных.
+- Удаление задач.
+- Фильтрация задач: все, активные, выполненные.
+- Счетчик оставшихся задач.
+- Сохранение задач в localStorage (чтобы после обновления страницы они не пропадали).
+
+---
+
+### **Пошаговое руководство**
+
+#### **Шаг 1: Создание проекта**
+
+1. Откройте терминал и выполните команду:
+```bash
+npm create vite@latest todo-manager -- --template react
+```
+
+2. Перейдите в папку проекта:
+```bash
+cd todo-manager
+```
+
+3. Установите зависимости:
+```bash
+npm install
+```
+
+**Шаги выше мы уже выполнили в начале практики, поэтому, перейдем далее**
+
+4. Удалите лишние файлы. В папке `src` оставьте только `main.jsx`, удалите `App.css` и `index.css` (стили будем писать в компонентах).
+
+5. Очистите `App.jsx` до базовой структуры:
+```jsx
+function App() {
+  return (
+    <div>
+      <h1>Менеджер задач</h1>
+    </div>
+  );
+}
+
+export default App;
+```
+
+6. Запустите сервер разработки:
+```bash
+npm run dev
+```
+
+#### **Шаг 2: Создание компонента задачи (TodoItem)**
+
+Создайте в папке `src` папку `components`, а в ней файл `TodoItem.jsx`:
+
+```jsx
+function TodoItem({ task, onToggle, onDelete }) {
+  return (
+    <li style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+      padding: '8px',
+      borderBottom: '1px solid #eee'
+    }}>
+      <input
+        type="checkbox"
+        checked={task.completed}
+        onChange={() => onToggle(task.id)}
+      />
+      <span style={{
+        flex: 1,
+        textDecoration: task.completed ? 'line-through' : 'none',
+        color: task.completed ? '#999' : '#333'
+      }}>
+        {task.text}
+      </span>
+      <button 
+        onClick={() => onDelete(task.id)}
+        style={{
+          background: '#ff4444',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          padding: '4px 8px',
+          cursor: 'pointer'
+        }}
+      >
+        Удалить
+      </button>
+    </li>
+  );
+}
+
+export default TodoItem;
+```
+
+**Что здесь происходит:**
+- Компонент принимает три пропса: `task` (объект задачи), `onToggle` (функция для отметки выполнения), `onDelete` (функция для удаления)
+- Чекбокс привязан к состоянию `task.completed`
+- Текст задачи зачеркивается, если задача выполнена
+- Кнопка удаления вызывает `onDelete` с идентификатором задачи
+
+#### **Шаг 3: Создание формы добавления (AddTodoForm)**
+
+Создайте файл `AddTodoForm.jsx` в папке `components`:
+
+```jsx
+import { useState } from 'react';
+
+function AddTodoForm({ onAdd }) {
+  const [text, setText] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (text.trim()) {
+      onAdd(text.trim());
+      setText('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Добавить новую задачу..."
+        style={{
+          padding: '8px',
+          width: '300px',
+          marginRight: '10px',
+          borderRadius: '4px',
+          border: '1px solid #ddd'
+        }}
+      />
+      <button 
+        type="submit"
+        style={{
+          padding: '8px 16px',
+          background: '#4CAF50',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        Добавить
+      </button>
+    </form>
+  );
+}
+
+export default AddTodoForm;
+```
+
+**Что здесь происходит:**
+- Локальное состояние `text` управляет значением поля ввода
+- При отправке формы вызывается `preventDefault` для предотвращения перезагрузки
+- Если текст не пустой, вызывается переданная функция `onAdd`, а поле очищается
+
+#### **Шаг 4: Создание фильтров (TodoFilters)**
+
+Создайте файл `TodoFilters.jsx`:
+
+```jsx
+function TodoFilters({ filter, onFilterChange, activeCount }) {
+  return (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px',
+      paddingBottom: '10px',
+      borderBottom: '2px solid #eee'
+    }}>
+      <span>Осталось задач: {activeCount}</span>
+      <div>
+        {['all', 'active', 'completed'].map((filterType) => (
+          <button
+            key={filterType}
+            onClick={() => onFilterChange(filterType)}
+            style={{
+              margin: '0 5px',
+              padding: '5px 10px',
+              background: filter === filterType ? '#007bff' : '#f0f0f0',
+              color: filter === filterType ? 'white' : '#333',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            {filterType === 'all' ? 'Все' : 
+             filterType === 'active' ? 'Активные' : 'Выполненные'}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default TodoFilters;
+```
+
+**Что здесь происходит:**
+- Компонент принимает текущий фильтр и функцию его изменения
+- Кнопка активного фильтра выделяется синим цветом
+- Счетчик показывает количество невыполненных задач
+
+#### **Шаг 5: Сборка главного компонента (App.jsx)**
+
+Теперь соберем всё вместе в `App.jsx`:
+
+```jsx
+import { useState, useEffect } from 'react';
+import AddTodoForm from './components/AddTodoForm';
+import TodoFilters from './components/TodoFilters';
+import TodoItem from './components/TodoItem';
+
+function App() {
+  // Состояние для списка задач
+  const [todos, setTodos] = useState(() => {
+    // Загружаем сохраненные задачи из localStorage
+    const saved = localStorage.getItem('todos');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Состояние для текущего фильтра
+  const [filter, setFilter] = useState('all');
+
+  // Сохраняем задачи в localStorage при каждом изменении
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  // Добавление новой задачи
+  const addTodo = (text) => {
+    const newTodo = {
+      id: Date.now(),
+      text: text,
+      completed: false
+    };
+    setTodos([...todos, newTodo]);
+  };
+
+  // Переключение статуса задачи
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
+  // Удаление задачи
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  // Фильтрация задач
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+    return true; // 'all'
+  });
+
+  // Подсчет активных задач
+  const activeCount = todos.filter(todo => !todo.completed).length;
+
+  return (
+    <div style={{
+      maxWidth: '600px',
+      margin: '0 auto',
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <h1 style={{ textAlign: 'center', color: '#333' }}>Менеджер задач</h1>
+      
+      <AddTodoForm onAdd={addTodo} />
+      
+      <TodoFilters 
+        filter={filter}
+        onFilterChange={setFilter}
+        activeCount={activeCount}
+      />
+      
+      {filteredTodos.length === 0 ? (
+        <p style={{ textAlign: 'center', color: '#999' }}>
+          {filter === 'all' ? 'Задач пока нет' : 
+           filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
+        </p>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {filteredTodos.map(todo => (
+            <TodoItem
+              key={todo.id}
+              task={todo}
+              onToggle={toggleTodo}
+              onDelete={deleteTodo}
+            />
+          ))}
+        </ul>
+      )}
+      
+      {todos.length > 0 && (
+        <button 
+          onClick={() => setTodos([])}
+          style={{
+            marginTop: '20px',
+            padding: '8px 16px',
+            background: '#dc3545',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            width: '100%'
+          }}
+        >
+          Очистить всё
+        </button>
+      )}
+    </div>
+  );
+}
+
+export default App;
+```
+
+**Ключевые моменты в App.jsx:**
+- `useState` с функцией инициализации для загрузки из localStorage
+- `useEffect` для сохранения задач при каждом изменении
+- Функции `addTodo`, `toggleTodo`, `deleteTodo` для управления задачами
+- Фильтрация задач в зависимости от выбранного фильтра
+- Условный рендеринг для пустого состояния
+- Передача пропсов дочерним компонентам
+
+#### **Шаг 6: Точка входа (main.jsx)**
+
+Убедитесь, что `main.jsx` выглядит так:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 ```
 
 ---
 
-#### **Задача №2: Изменение цвета при наведении**
-**Условие:** Создайте блок на странице. При наведении мыши на блок должен меняться его цвет на красный.
+### **Дополнительные задания для самостоятельной работы**
 
-**Решение:**
-```javascript
-// Находим блок по классу
-let block = document.querySelector('.block');
+После создания базового приложения добавьте следующие улучшения:
 
-// При наведении мыши меняем цвет на красный
-block.addEventListener('mouseover', () => {
-    block.style.backgroundColor = 'red';
-});
+1. **Редактирование задачи** — при двойном клике на текст задачи должно появляться поле для редактирования
 
-// Когда мышь уходит, возвращаем исходный цвет (добавим для удобства)
-block.addEventListener('mouseout', () => {
-    block.style.backgroundColor = ''; // вернёт цвет по умолчанию
-});
-```
-
-**Как это работает:**
-- `mouseover` — срабатывает, когда курсор оказывается над элементом
-- `mouseout` — срабатывает, когда курсор покидает элемент
-- `element.style.backgroundColor` — изменяет CSS-свойство background-color
+2. **Смена темы** — реализуйте переключение между светлой и темной темой
 
 ---
 
-#### **Задача №3: Показать/скрыть блок**
-**Условие:** Создайте две кнопки на странице. При нажатии на первую кнопку должны появиться подробности, а при нажатии на вторую кнопку должны скрыться подробности.
+### **Публикация на GitHub Pages**
 
-**Решение:**
-```javascript
-// Находим блок с подробностями и кнопки
-let details = document.querySelector('.details');
-let showButton = document.querySelector('#show-button');
-let hideButton = document.querySelector('#hide-button');
+#### **Шаг 1: Подготовка репозитория**
 
-// При нажатии на "Показать" делаем блок видимым
-showButton.addEventListener('click', () => {
-    details.style.display = 'block';
-});
-
-// При нажатии на "Скрыть" прячем блок
-hideButton.addEventListener('click', () => {
-    details.style.display = 'none';
-});
+1. Создайте новый репозиторий на GitHub (например, `todo-manager`)
+2. Инициализируйте git в локальном проекте и свяжите с репозиторием:
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/ваш-логин/todo-manager.git
+git push -u origin main
 ```
 
-**Как это работает:**
-- `display: block` — элемент отображается
-- `display: none` — элемент полностью скрыт и не занимает место на странице
+#### **Шаг 2: Настройка Vite для GitHub Pages**
+
+Установите пакет `gh-pages`:
+```bash
+npm install --save-dev gh-pages
+```
+
+В файле `package.json` добавьте:
+```json
+"homepage": "https://ваш-логин.github.io/todo-manager"
+```
+
+В раздел `scripts` добавьте:
+```json
+"predeploy": "npm run build",
+"deploy": "gh-pages -d dist"
+```
+
+#### **Шаг 3: Настройка конфигурации Vite**
+
+Создайте или отредактируйте файл `vite.config.js`:
+
+```javascript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/todo-manager/' // замените на название вашего репозитория
+})
+```
+
+#### **Шаг 4: Деплой**
+
+Выполните команду:
+```bash
+npm run deploy
+```
+
+#### **Шаг 5: Настройка GitHub Pages**
+
+1. Перейдите в настройки репозитория на GitHub (вкладка Settings)
+2. В разделе Pages выберите ветку `gh-pages` и папку `/root`
+3. Сохраните — через несколько минут приложение будет доступно по адресу: `https://ваш-логин.github.io/todo-manager`
+
+#### **Что делать при обновлении приложения**
+
+При внесении изменений просто выполните:
+```bash
+npm run deploy
+```
+
+Изменения автоматически соберутся и загрузятся на GitHub Pages.
 
 ---
 
-#### **Задача №4: Подсветка поля при фокусе**
-**Условие:** Создайте поле ввода на странице. При фокусировке на поле ввода должен меняться его цвет на желтый.
+### **Формат отчёта**
 
-**Решение:**
-```javascript
-let input = document.querySelector('input');
+1. Выполнить все шаги руководства, убедиться в работоспособности приложения локально.
+2. Опубликовать приложение на GitHub Pages.
+3. Подготовить отчёт, содержащий:
+   - Ссылку на репозиторий с исходным кодом
+   - Ссылку на работающее приложение на GitHub Pages
+   - Скриншоты работающего приложения (основное окно, добавление задачи, отметка выполнения, фильтрация)
+   - Краткое описание реализованного функционала
+4. Сохранить отчёт в формате PDF и приложить в область для загрузки.
 
-// При получении фокуса — желтый фон
-input.addEventListener('focus', () => {
-    input.style.backgroundColor = 'yellow';
-});
-
-// При потере фокуса — белый фон
-input.addEventListener('blur', () => {
-    input.style.backgroundColor = 'white';
-});
-```
-
-**Как это работает:**
-- `focus` — срабатывает, когда пользователь кликает на поле или переходит к нему клавишей Tab
-- `blur` — срабатывает, когда поле теряет фокус
-
----
-
-#### **Задача №5: Двойной клик**
-**Условие:** Создайте кнопку на странице. При двойном клике на кнопку должен выводиться текст "Кнопка была дважды нажата".
-
-**Решение:**
-```javascript
-let button = document.querySelector('button');
-
-button.addEventListener('dblclick', () => {
-    console.log('Кнопка была дважды нажата');
-});
-```
-
-**Как это работает:**
-- `dblclick` — событие двойного клика (два быстрых нажатия)
-
-
----
-
-### **Задания для самостоятельного выполнения**
-
-#### **Задание №1: Счётчик кликов**
-Создайте кнопку и параграф (или `div`) для отображения счётчика. При каждом клике на кнопку число в счётчике должно увеличиваться на 1.
-
-#### **Задание №2: Приветствие**
-Создайте поле ввода и кнопку "Привет". При нажатии на кнопку выводите в консоль (или на страницу) текст: "Привет, [имя]!", где [имя] — это значение из поля ввода.
-
-#### **Задание №3: Переключатель темы**
-Создайте кнопку "Сменить тему". При клике на неё у всей страницы (тега `body`) должен меняться фон на тёмный, а текст — на светлый. При повторном клике — возвращаться обратно.
-
-Используйте `document.body.style.backgroundColor` и проверку текущего цвета.
-
-#### **Задание №4: Список дел**
-Создайте поле ввода и кнопку "Добавить". При нажатии на кнопку текст из поля ввода должен добавляться в виде нового элемента списка (`<li>`) в существующий список (`<ul>` или `<ol>`).
-
-Используйте `createElement()` и `appendChild()`.
-
-#### **Задание №5: Управление размером**
-Создайте квадратный блок (div) и две кнопки: "+" и "-". При клике на "+" блок должен увеличиваться на 10px, при клике на "-" — уменьшаться на 10px.
-
-Меняйте `width` и `height` через `style`.
 
 ---
 
