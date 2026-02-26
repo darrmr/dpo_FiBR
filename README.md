@@ -906,7 +906,7 @@ npm install --save-dev gh-pages
 
 В файле `package.json` добавьте:
 ```json
-"homepage": "https://ваш-логин.github.io/book-manager" // тут полная ссылка на Git Pages
+"homepage": "https://ваш-логин.github.io/book-manager/" // тут полная ссылка на Git Pages
 ```
 
 В раздел `scripts` добавьте:
