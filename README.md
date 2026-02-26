@@ -639,7 +639,7 @@ npm install --save-dev gh-pages
 
 В файле `package.json` добавьте:
 ```json
-"homepage": "https://ваш-логин.github.io/todo-app" // тут полный путь до Git Pages
+"homepage": "https://ваш-логин.github.io/todo-app/" // тут полный путь до Git Pages
 ```
 
 В раздел `scripts` добавьте:
@@ -673,7 +673,7 @@ npm run deploy
 
 1. Перейдите в настройки репозитория на GitHub (вкладка Settings).
 2. В разделе Pages выберите ветку `gh-pages` и папку `/root` <- **ВАЖНО!**.
-3. Сохраните — через несколько минут приложение будет доступно по адресу: `https://ваш-логин.github.io/todo-app`.
+3. Сохраните — через несколько минут приложение будет доступно по адресу: `https://ваш-логин.github.io/todo-app/`.
 
 #### **Что делать при обновлении приложения**
 
