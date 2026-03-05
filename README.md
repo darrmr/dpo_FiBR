@@ -16,6 +16,6 @@
 |1|7|Практика 10|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_10)|
 |1|8|Практика 11|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_11)|
 |1|8|Практика 12|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_12)|
-|1|9|Практика 13|Ссылка скоро появится|
-|1|9|Практика 14|Ссылка скоро появится|
-|1|10|Практика 15|Ссылка скоро появится|
+|1|9|Практика 13|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_13)|
+|1|9|Практика 14|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_14)|
+|1|10|Практика 15|[Ссылка](https://github.com/darrmr/dpo_FiBR/tree/pr_15)|
