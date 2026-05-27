@@ -4,5 +4,5 @@
  
 |Тематический блок|Неделя обучения|Тема|Ссылка|
 |:-:|:-:|:-|:-:|
-|1|1|Практика 1|[Ссылка](https://github.com/darrmr/)|
-|1|2|Практика 2|[Ссылка](https://github.com/darrmr/)|
+|1|1|Практика nginx|[Ссылка](https://github.com/darrmr/dpo_FiBR/blob/pr_3_3/nginx.md)|
+|1|2|Практика docker|[Ссылка](https://github.com/darrmr/dpo_FiBR/blob/pr_3_3/docker.md)|
