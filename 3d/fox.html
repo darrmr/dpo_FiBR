@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js — 3D модель лисы</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: sans-serif; }
+        #info { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); color: white; padding: 8px 15px; border-radius: 8px; pointer-events: none; z-index: 100; }
+        #loading { position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.7); color: yellow; padding: 5px 10px; border-radius: 5px; font-family: monospace; pointer-events: none; z-index: 100; }
+        a { position: absolute; top: 20px; right: 20px; color: white; background: rgba(0,0,0,0.7); padding: 8px 15px; border-radius: 8px; text-decoration: none; font-family: sans-serif; z-index: 100; }
+    </style>
+</head>
+<body>
+    <div id="info">Задание 2: Загруженная модель лисы | Мышь для вращения камеры</div>
+    <div id="loading">Загрузка модели: 0%</div>
+    <a href="../index.html">← На главную</a>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="fox.js"></script>
+</body>
+</html>

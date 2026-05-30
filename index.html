@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        .cards {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 250px;
+            transition: transform 0.2s, background 0.2s;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.2);
+        }
+        .card h2 {
+            margin-top: 0;
+        }
+        .card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        footer {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Практические занятия 5-6</h1>
+        <div class="cards">
+            <a href="pr/cube.html" class="card">
+                <div class="emoji">🧊</div>
+                <h2>Пример 1</h2>
+                <p>Вращающийся куб с изменением цвета по клику и динамическим освещением</p>
+            </a>
+            <a href="pr/fox.html" class="card">
+                <div class="emoji">🦊</div>
+                <h2>Пример 2</h2>
+                <p>Загрузка 3D-модели лисы, анимация покачивания и OrbitControls</p>
+            </a>
+            <a href="pr/ball.html" class="card">
+                <div class="emoji">🔴</div>
+                <h2>Пример 3</h2>
+                <p>Летающие шарики, отскакивающие от границ, счётчик отскоков</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
